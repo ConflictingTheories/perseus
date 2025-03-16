@@ -1,50 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Modal } from 'react-native';
 
 const ReaderScreen = ({ route }) => {
-  const { bookId, lines, content } = route.params;
-  const [bookContent, setBookContent] = useState(content || '');
+  const { content } = route.params;
+  const [bookContent] = useState(content || '');
   const [mode, setMode] = useState('reader'); // 'reader' or 'wordLookup'
-  const [selectedText, setSelectedText] = useState('');
+  const [, setSelectedText] = useState('');
+  const [selectedWord, setSelectedWord] = useState('');
   const [highlightedText, setHighlightedText] = useState('');
-
-  useEffect(() => {
-    if (!content && bookId !== 'demo') {
-      // Fetch book content from the Perseus Library API
-      fetch(`https://scaife.perseus.org/api/cts?request=GetPassage&urn=${bookId}&start=1&end=${lines}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.passages && data.passages.length > 0) {
-            const passage = data.passages[0].content;
-            setBookContent(passage);
-          } else {
-            setBookContent(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-            );
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching book content:', error);
-          setBookContent(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-          );
-        });
-    }
-  }, [bookId, lines, content]);
-
-  const handleWordPress = (word) => {
-    if (mode === 'wordLookup') {
-      setSelectedText(word);
-      // Implement word lookup logic here
-      console.log(`Selected word: ${word}`);
-    }
-  };
+  const [showModal, setShowModal] = useState(false);
 
   const handleLinePress = (line) => {
     if (mode === 'reader') {
       setSelectedText(line);
       // Implement line selection logic here
       console.log(`Selected line: ${line}`);
+      // todo - fetch line translation from API
+    }
+  };
+
+  const handleWordPress = (word) => {
+    if (mode === 'wordLookup') {
+      // Implement word selection logic here
+      console.log(`Selected word: ${word}`);
+      setSelectedWord(word);
+      // todo - fetch word definition from API
+      setShowModal(true);
     }
   };
 
@@ -92,6 +73,16 @@ const ReaderScreen = ({ route }) => {
         </TouchableOpacity>
       </View>
       <View>{renderContentWithLineNumbers(bookContent)}</View>
+      <Modal visible={showModal} animationType="slide" transparent={true}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+            <Text>{selectedWord}</Text>
+            <TouchableOpacity onPress={() => setShowModal(false)}>
+              <Text>Close Modal</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
