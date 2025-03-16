@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Modal } from 'react-native';
+import lightModeStyle from '../styles/lightMode';
+import darkModeStyle from '../styles/darkMode';
 
 const ReaderScreen = ({ route }) => {
   const { content, font } = route.params;
@@ -10,73 +12,16 @@ const ReaderScreen = ({ route }) => {
   const [highlightedText, setHighlightedText] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#d4af37', // gold color
-    fontFamily: 'serif', // classical font
-  },
-  modalClose: {
-    position: 'absolute',
-    top: 10,
-    right: 25,
-  },
-  modal: {
-    flex: 1,
-    alignItems: 'center',
-    height: '40%',
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  container: {
-    padding: 10,
-    flex: 1,
-    backgroundColor: '#f5f5dc', // parchment color
-  },
-  modeSwitch: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 10,
-  },
-  activeMode: {
-    fontWeight: 'bold',
-    color: 'blue',
-  },
-  inactiveMode: {
-    color: 'gray',
-  },
-  lineContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 5,
-  },
-  lineNumber: {
-    width: 30,
-    textAlign: 'right',
-    marginRight: 10,
-    color: '#888',
-  },
-  lineText: {
-    flex: 1,
-    fontFamily: font || 'serif',
-    flexWrap: 'wrap',
-  },
-  word: {
-    fontFamily : font || 'serif',
-    fontWeight: 'normal',
-  },
-});
+  const [darkMode, setDarkMode] = useState(route.params.darkMode || false);
+  const styles = StyleSheet.create({
+    ...(darkMode ? darkModeStyle.reader : lightModeStyle.reader),
+    lineText: {
+      fontFamily: font || 'serif',
+    },
+    word: {
+      fontFamily: font || 'serif',
+    },
+  });
 
   const handleLinePress = (line) => {
     if (mode === 'reader') {
@@ -154,6 +99,5 @@ const styles = StyleSheet.create({
     </ScrollView>
   );
 };
-
 
 export default ReaderScreen;
