@@ -1,18 +1,18 @@
 // navigation/MainNavigator.js
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LibraryScreen from '../screens/LibraryScreen';
 import ReaderScreen from '../screens/ReaderScreen';
-import { useTheme, toggleTheme } from '../app/ThemeContext';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '../app/ThemeContext';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 
 const Stack = createStackNavigator();
 
 const MainNavigator = () => {
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   const styles = StyleSheet.create({
     lightContainer: {

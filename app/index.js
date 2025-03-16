@@ -1,24 +1,21 @@
 // App.js
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import React from 'react';
 import MainNavigator from '../nav/MainNavigator';
-import {
-  useFonts,
-  GFSDidot_400Regular
-} from "@expo-google-fonts/gfs-didot";
-import { useTheme } from './ThemeContext';
-
+import { useFonts, GFSDidot_400Regular } from '@expo-google-fonts/gfs-didot';
+import { ThemeProvider } from './ThemeContext';
 
 export default function App() {
-
-  const { theme } = useTheme();
-
   let [fontsLoaded] = useFonts({
     GFSDidot_400Regular,
   });
+
   if (!fontsLoaded) {
-    return <View></View>;
+    return <ThemeProvider></ThemeProvider>;
   } else {
-    return <MainNavigator />;
+    return (
+      <ThemeProvider>
+        <MainNavigator />
+      </ThemeProvider>
+    );
   }
 }

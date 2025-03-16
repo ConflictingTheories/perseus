@@ -2,12 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import defaultBooks from '../data/demo';
+import { useTheme, toggleTheme } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 
-const LibraryScreen = ({ route, navigation, darkMode }) => {
+const LibraryScreen = ({ navigation, darkMode }) => {
   const [books, setBooks] = useState([]);
-  const styles = StyleSheet.create(darkMode ? darkModeStyle.library : lightModeStyle.library);
+  const { theme } = useTheme();
+  
+  const styles = StyleSheet.create(theme === 'light' ? lightModeStyle.library : darkModeStyle.library);
 
   useEffect(() => {
     // Fetch books from the Perseus Library API

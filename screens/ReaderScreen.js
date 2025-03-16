@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Modal } from 'react-native';
+import { useTheme, ThemeProvider } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 
 const ReaderScreen = ({ route }) => {
   const { content, font } = route.params;
+  const {theme} = useTheme();
   const [bookContent] = useState(content || '');
   const [mode, setMode] = useState('reader'); // 'reader' or 'wordLookup'
-  const [, setSelectedText] = useState('');
+  const [text, setSelectedText] = useState('');
   const [selectedWord, setSelectedWord] = useState('');
   const [highlightedText, setHighlightedText] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const [darkMode, setDarkMode] = useState(route.params.darkMode || false);
   const styles = StyleSheet.create({
-    ...(darkMode ? darkModeStyle.reader : lightModeStyle.reader),
+    ...(theme === 'light' ? lightModeStyle.reader : darkModeStyle.reader),
     lineText: {
       fontFamily: font || 'serif',
     },
@@ -23,18 +24,18 @@ const ReaderScreen = ({ route }) => {
     },
   });
 
+  // Implement line selection logic here
   const handleLinePress = (line) => {
     if (mode === 'reader') {
       setSelectedText(line);
-      // Implement line selection logic here
       console.log(`Selected line: ${line}`);
       // todo - fetch line translation from API
     }
   };
 
+  // Implement word selection logic here
   const handleWordPress = (word) => {
     if (mode === 'wordLookup') {
-      // Implement word selection logic here
       console.log(`Selected word: ${word}`);
       setSelectedWord(word);
       // todo - fetch word definition from API
@@ -42,6 +43,7 @@ const ReaderScreen = ({ route }) => {
     }
   };
 
+  // Render content with line numbers
   const renderContentWithLineNumbers = (content) => {
     return content.split('\n').map((line, index) => (
       <View key={index} style={styles.lineContainer}>
@@ -59,6 +61,7 @@ const ReaderScreen = ({ route }) => {
     ));
   };
 
+  // Implement PanResponder for text highlighting (TODO)
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderGrant: () => {

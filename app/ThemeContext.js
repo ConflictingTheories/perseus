@@ -1,4 +1,4 @@
-// app/ThemeContext.js
+// ThemeContext.js
 import React, { createContext, useState, useContext } from 'react';
 
 const ThemeContext = createContext();
@@ -12,5 +12,9 @@ export const ThemeProvider = ({ children }) => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
-  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
