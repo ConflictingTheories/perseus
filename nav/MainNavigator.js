@@ -1,38 +1,50 @@
 // navigation/MainNavigator.js
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LibraryScreen from '../screens/LibraryScreen';
 import ReaderScreen from '../screens/ReaderScreen';
+import { useTheme, toggleTheme } from '../app/ThemeContext';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 
 const Stack = createStackNavigator();
 
 const MainNavigator = () => {
-  const [darkMode, setDarkMode] = useState(true);
+  const { theme } = useTheme();
 
-  const LibraryScreenComponent = ({ navigation, route }) => <LibraryScreen route={route} navigation={navigation} darkMode={darkMode} />;
-  const ReaderScreenComponent = ({ navigation, route }) => <ReaderScreen route={route} navigation={navigation} darkMode={darkMode} />;
+  const styles = StyleSheet.create({
+    lightContainer: {
+      flex: 1,
+      backgroundColor: 'white',
+      color: 'black',
+    },
+    darkContainer: {
+      flex: 1,
+      backgroundColor: 'black',
+      color: 'white',
+    },
+  });
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Library"
-        initialParams={darkMode}
-        screenOptions={{
-          ...(darkMode ? darkModeStyle.navigation : lightModeStyle.navigation),
-          headerRight: () => (
-            <TouchableOpacity onPress={() => setDarkMode(!!darkMode)}>
-              <Text>{darkMode ? 'Dark' : 'Light'}</Text>
-            </TouchableOpacity>
-          ),
-        }}
-      >
-        <Stack.Screen name="Library" component={LibraryScreenComponent} />
-        <Stack.Screen name="Reader" component={ReaderScreenComponent} />
-      </Stack.Navigator>
+      <View style={theme === 'light' ? styles.lightContainer : styles.darkContainer}>
+        <Stack.Navigator
+          initialRouteName="Library"
+          screenOptions={{
+            ...(theme === 'light' ? lightModeStyle.navigation : darkModeStyle.navigation),
+            headerRight: () => (
+              <TouchableOpacity onPress={toggleTheme}>
+                <Text>{theme === 'light' ? 'Dark' : 'Light'}</Text>
+              </TouchableOpacity>
+            ),
+          }}
+        >
+          <Stack.Screen name="Library" component={LibraryScreen} />
+          <Stack.Screen name="Reader" component={ReaderScreen} />
+        </Stack.Navigator>
+      </View>
     </NavigationContainer>
   );
 };

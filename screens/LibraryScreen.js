@@ -7,8 +7,6 @@ import darkModeStyle from '../styles/darkMode';
 
 const LibraryScreen = ({ route, navigation, darkMode }) => {
   const [books, setBooks] = useState([]);
-  console.log({route, navigation, darkMode});
-  // const [darkMode, setDarkMode] = useState(darkMode || false);
   const styles = StyleSheet.create(darkMode ? darkModeStyle.library : lightModeStyle.library);
 
   useEffect(() => {

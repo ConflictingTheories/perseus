@@ -1,8 +1,14 @@
+import React from 'react';
 import { registerRootComponent } from 'expo';
+import { ThemeProvider } from './app/ThemeContext';
+import Perseus from './app/index';
 
-import App from './app/index';
+const App = () => {
+  return (
+    <ThemeProvider>
+      <Perseus />
+    </ThemeProvider>
+  );
+};
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
 registerRootComponent(App);
