@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder } from 'react-native';
 
-
 const ReaderScreen = ({ route }) => {
   const { bookId, lines, content } = route.params;
   const [bookContent, setBookContent] = useState(content || '');
@@ -10,21 +9,25 @@ const ReaderScreen = ({ route }) => {
   const [highlightedText, setHighlightedText] = useState('');
 
   useEffect(() => {
-    if (!content && bookId !== 'lorem-ipsum') {
+    if (!content && bookId !== 'demo') {
       // Fetch book content from the Perseus Library API
       fetch(`https://scaife.perseus.org/api/cts?request=GetPassage&urn=${bookId}&start=1&end=${lines}`)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           if (data.passages && data.passages.length > 0) {
             const passage = data.passages[0].content;
             setBookContent(passage);
           } else {
-            setBookContent('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+            setBookContent(
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Error fetching book content:', error);
-          setBookContent('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+          setBookContent(
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          );
         });
     }
   }, [bookId, lines, content]);
@@ -88,9 +91,7 @@ const ReaderScreen = ({ route }) => {
           <Text style={mode === 'wordLookup' ? styles.activeMode : styles.inactiveMode}>Word Lookup Mode</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        {renderContentWithLineNumbers(bookContent)}
-      </View>
+      <View>{renderContentWithLineNumbers(bookContent)}</View>
     </ScrollView>
   );
 };
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   },
   word: {
     fontWeight: 'normal',
-  }
+  },
 });
 
 export default ReaderScreen;

@@ -39,8 +39,8 @@ const LibraryScreen = ({ navigation }) => {
   // examples - demo data
   const defaultBooks = [
     {
-      id: 'lorem-ipsum',
-      title: 'Odyssey',
+      id: 'demo',
+      title: 'Ὀδύσσεια',
       content: [
         'ἄνδρα μοι ἔννεπε, Μοῦσα, πολύτροπον, ὃς μάλα πολλὰ',
         'πλάγχθη, ἐπεὶ Τροίης ἱερὸν πτολίεθρον ἔπερσε·',
@@ -55,7 +55,7 @@ const LibraryScreen = ({ navigation }) => {
       ].join('\n'),
     },
     {
-      id: 'lorem-ipsum',
+      id: 'demo',
       title: 'Lorem Ipsum',
       content: [
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -71,7 +71,7 @@ const LibraryScreen = ({ navigation }) => {
       ].join('\n'),
     },
     {
-      id: 'lorem-ipsum',
+      id: 'demo',
       title: '古池 (ふるいけ, "Furuike")',
       content: ['ふるいけや', 'かわずとびこむ', 'みずのおと'].join('\n'),
     },
