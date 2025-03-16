@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Modal } from 'react-native';
+import { Gesture, State } from 'react-native-gesture-handler';
 
 const ReaderScreen = ({ route }) => {
   const { content } = route.params;
@@ -74,13 +75,13 @@ const ReaderScreen = ({ route }) => {
       </View>
       <View>{renderContentWithLineNumbers(bookContent)}</View>
       <Modal visible={showModal} animationType="slide" transparent={true}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.modal}>
           <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
             <Text>{selectedWord}</Text>
-            <TouchableOpacity onPress={() => setShowModal(false)}>
-              <Text>Close Modal</Text>
-            </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={() => setShowModal(false)} style={styles.modalClose}>
+            <Text>X</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </ScrollView>
@@ -93,6 +94,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#d4af37', // gold color
     fontFamily: 'serif', // classical font
+  },
+  modalClose: {
+    position: 'absolute',
+    top: 10,
+    right: 25,
+  },
+  modal: {
+    flex: 1,
+    alignItems: 'center',
+    height: '40%',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
   container: {
     padding: 10,
