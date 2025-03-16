@@ -42,4 +42,4 @@ If you have any questions or suggestions, feel free to reach out to me.
 
 ## Screenshot
 
-![Example Line 1-10 from Homer's Odyssey in Greek](example-odyseey.png)
+![Example Line 1-10 from Homer's Odyssey in Greek](docs/example-odyseey.png)

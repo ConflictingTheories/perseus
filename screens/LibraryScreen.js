@@ -39,8 +39,9 @@ const LibraryScreen = ({ navigation }) => {
   // examples - demo data
   const defaultBooks = [
     {
-      id: 'demo',
+      id: 'demo-gr',
       title: 'Ὀδύσσεια',
+      font: 'GFSDidot_400Regular',
       content: [
         'ἄνδρα μοι ἔννεπε, Μοῦσα, πολύτροπον, ὃς μάλα πολλὰ',
         'πλάγχθη, ἐπεὶ Τροίης ἱερὸν πτολίεθρον ἔπερσε·',
@@ -55,8 +56,9 @@ const LibraryScreen = ({ navigation }) => {
       ].join('\n'),
     },
     {
-      id: 'demo',
+      id: 'demo-lt',
       title: 'Lorem Ipsum',
+      font: 'serif',
       content: [
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
@@ -71,7 +73,8 @@ const LibraryScreen = ({ navigation }) => {
       ].join('\n'),
     },
     {
-      id: 'demo',
+      id: 'demo-jp',
+      font: 'sans-serif',
       title: '古池 (ふるいけ, "Furuike")',
       content: ['ふるいけや', 'かわずとびこむ', 'みずのおと'].join('\n'),
     },
@@ -102,7 +105,7 @@ const LibraryScreen = ({ navigation }) => {
         data={books}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Reader', { bookId: item.id, content: item.content, lines: 5 })}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Reader', { bookId: item.id, content: item.content, font: item.font, lines: 5 })}>
             <Text style={styles.buttonText}>{item.title}</Text>
           </TouchableOpacity>
         )}
