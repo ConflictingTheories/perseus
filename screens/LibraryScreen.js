@@ -4,7 +4,7 @@ import { View, FlatList, TouchableOpacity, StyleSheet, Text } from 'react-native
 import { useTheme } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
-import { getBookList, initializeFts, loadFtsData } from '../data/ftsDb';
+import { getBookList, getBookContent, initializeFts, loadFtsData } from '../data/ftsDb';
 
 const LibraryScreen = ({ navigation, darkMode }) => {
   const [books, setBooks] = useState([]);
@@ -33,17 +33,17 @@ const LibraryScreen = ({ navigation, darkMode }) => {
     // TODO - look into making this a feature (paid??)
     // support offline reading of books
     // Fetch books from the Perseus Library API
-    fetch('https://api.perseus.tufts.edu/library')
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.books && data.books.length > 0) {
-          // load into FTS database
-          loadFtsData(data.books);
-        } 
-      })
-      .catch((error) => {
-        console.error('Error fetching remote books:', error);
-      });
+    // fetch('https://api.perseus.tufts.edu/library')
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     if (data.books && data.books.length > 0) {
+    //       // load into FTS database
+    //       loadFtsData(data.books);
+    //     } 
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching remote books:', error);
+    //   });
   }, []);
 
   return (
@@ -56,7 +56,7 @@ const LibraryScreen = ({ navigation, darkMode }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('Reader', { bookId: item.id, content: item.content, darkMode, font: item.font, lines: 5 })}
+            onPress={async () => navigation.navigate('Reader', { bookId: item.id, content: await getBookContent(item.id), font: item.font, lines: 5 })}
           >
             <Text style={styles.buttonText}>{item.title}</Text>
           </TouchableOpacity>

@@ -3,11 +3,10 @@ import demo from './demo';
 import { deleteDatabaseAsync } from 'expo-sqlite';
 
 // Open a SINGLE database connection globally
-const db = SQLite.openDatabaseAsync('perseus.db', { useNewConnection: false });
 
 // Open database connection
 export const openConnection = async () => {
-  return await db;
+  return await SQLite.openDatabaseAsync('perseus.db', { useNewConnection: false });
 };
 
 // delete database (for testing / reset)
@@ -32,7 +31,6 @@ export const checkIfTableExists = async (tableName) => {
 export const initializeFts = async () => {
   try {
     let tableExists = await checkIfTableExists('text_fts');
-
     if (!tableExists) {
       let connection = await openConnection();
       await connection.execAsync('CREATE VIRTUAL TABLE text_fts USING fts4(id, title, language, font, content, metadata)');
@@ -61,6 +59,7 @@ export const initializeFts = async () => {
 // Insert data into FTS table
 export const loadFtsData = async (data) => {
   try {
+    const db = SQLite.openDatabaseAsync('perseus.db', { useNewConnection: false });
     await db.runAsync('INSERT INTO text_fts (id, title, language, font, content, metadata) VALUES (?, ?, ?, ?, ?, ?)', [
       row.id,
       row.title,
@@ -90,7 +89,7 @@ export const getBookList = async (page, limit) => {
   let connection = await openConnection();
   const offset = (page - 1) * limit;
   try {
-    return await connection.getAllAsync('SELECT * FROM text_fts LIMIT ? OFFSET ?', [limit, offset]);
+    return await connection.getAllAsync('SELECT title,id,font FROM text_fts LIMIT ? OFFSET ?', [limit, offset]);
   } catch (error) {
     console.error('Error fetching books:', error);
     return [];

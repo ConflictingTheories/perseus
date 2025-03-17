@@ -13,9 +13,9 @@ export default function App() {
     return <ThemeProvider></ThemeProvider>;
   } else {
     return (
-      <ThemeProvider>
-        <MainNavigator />
-      </ThemeProvider>
+        <ThemeProvider>
+          <MainNavigator />
+        </ThemeProvider>
     );
   }
 }

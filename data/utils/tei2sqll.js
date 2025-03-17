@@ -84,79 +84,83 @@ function parseXMLFiles(directory) {
     }
 
     files.forEach((file) => {
-      const filePath = path.join(directory, file);
-      const stats = fs.statSync(filePath);
+      try {
+        const filePath = path.join(directory, file);
+        const stats = fs.statSync(filePath);
 
-      if (stats.isDirectory()) {
-        return parseXMLFiles(filePath); // Recursively parse subdirectories
-      } else if (path.extname(file) === '.xml' && file !== '__cts__.xml') {
-        // Load and parse XML file
-        fs.readFile(filePath, 'utf-8', (err, data) => {
-          if (err) {
-            console.error('Error reading XML file:', err);
-            return;
-          }
-
-          xml2js.parseString(data, (err, result) => {
+        if (stats.isDirectory()) {
+          return parseXMLFiles(filePath); // Recursively parse subdirectories
+        } else if (path.extname(file) === '.xml' && file !== '__cts__.xml') {
+          // Load and parse XML file
+          fs.readFile(filePath, 'utf-8', (err, data) => {
             if (err) {
-              console.error('Error parsing XML:', filePath, err);
+              console.error('Error reading XML file:', err);
               return;
             }
 
-            // TEI sections
-            let TEI = result.TEI || result['TEI?.2'];
-            let teiHeader = TEI?.teiHeader[0] || {};
-            let fileDesc = teiHeader?.fileDesc ? teiHeader?.fileDesc[0] : {};
-            let encodingDesc = teiHeader?.encodingDesc ? teiHeader?.encodingDesc[0] : {};
-            let revisionDesc = teiHeader?.revisionDesc ? teiHeader?.revisionDesc[0] : {};
+            xml2js.parseString(data, (err, result) => {
+              if (err) {
+                console.error('Error parsing XML:', filePath, err);
+                return;
+              }
 
-            // book info
-            let bookDetails = fileDesc?.titleStmt[0] || {};
-            let publisherDetails = fileDesc?.publicationStmt[0] || {};
-            let languageDetails = teiHeader?.profileDesc[0]?.langUsage[0] || {};
+              // TEI sections
+              let TEI = result.TEI || result['TEI?.2'];
+              let teiHeader = TEI?.teiHeader[0] || {};
+              let fileDesc = teiHeader?.fileDesc ? teiHeader?.fileDesc[0] : {};
+              let encodingDesc = teiHeader?.encodingDesc ? teiHeader?.encodingDesc[0] : {};
+              let revisionDesc = teiHeader?.revisionDesc ? teiHeader?.revisionDesc[0] : {};
 
-            // misc
-            let sourceDetails = fileDesc?.sourceDesc[0] || {};
-            let encodingDetails = encodingDesc || {};
-            let revisionDetails = revisionDesc || {};
+              // book info
+              let bookDetails = fileDesc?.titleStmt ? fileDesc?.titleStmt[0] : {};
+              let publisherDetails = fileDesc?.publicationStmt ? fileDesc?.publicationStmt[0] : {};
+              let languageDetails = teiHeader?.profileDesc ? teiHeader?.profileDesc[0]?.langUsage[0] : {};
 
-            // extract
-            try {
-              let title = bookDetails?.title ? bookDetails?.title[0]?._ || bookDetails?.title[0] : '';
-              let author = bookDetails?.author ? bookDetails?.author[0] : '';
-              let language = languageDetails?.language ? languageDetails?.language[0]?._ : '';
-              let publisher = publisherDetails?.publisher ? publisherDetails?.publisher[0] : '';
-              let publicationDate = publisherDetails?.date ? publisherDetails?.date[0]?._ || publisherDetails?.date[0] : '';
-              let canonicalId = publisherDetails?.idno ? publisherDetails?.idno[0]?._ : '';
-              let font = getFont(language);
+              // misc
+              let sourceDetails = fileDesc?.sourceDesc? fileDesc?.sourceDesc[0] : {};
+              let encodingDetails = encodingDesc || {};
+              let revisionDetails = revisionDesc || {};
 
-              // format metadata & content information for database
-              let metadata = {
-                title,
-                author,
-                language,
-                publisher,
-                font,
-                publicationDate,
-                canonicalId,
-                misc: {
-                  sourceDetails,
-                  encodingDetails,
-                  revisionDetails,
-                },
-              };
+              // extract
+              try {
+                let title = bookDetails?.title ? bookDetails?.title[0]?._ || bookDetails?.title[0] : '';
+                let author = bookDetails?.author ? bookDetails?.author[0] : '';
+                let language = languageDetails?.language ? languageDetails?.language[0]?._ : '';
+                let publisher = publisherDetails?.publisher ? publisherDetails?.publisher[0] : '';
+                let publicationDate = publisherDetails?.date ? publisherDetails?.date[0]?._ || publisherDetails?.date[0] : '';
+                let canonicalId = publisherDetails?.idno ? publisherDetails?.idno[0]?._ : '';
+                let font = getFont(language);
 
-              // todo - parse lines from text
-              let content = TEI?.text[0]?.body[0] || TEI?.text[0]?.body[0];
+                // format metadata & content information for database
+                let metadata = {
+                  title,
+                  author,
+                  language,
+                  publisher,
+                  font,
+                  publicationDate,
+                  canonicalId,
+                  misc: {
+                    sourceDetails,
+                    encodingDetails,
+                    revisionDetails,
+                  },
+                };
 
-              let dataRows = parseContent(content);
+                // todo - parse lines from text
+                let content = TEI?.text[0]?.body[0] || TEI?.text[0]?.body[0];
 
-              loadData(dataRows, metadata);
-            } catch (e) {
-              console.log('Error extracting metadata:', e);
-            }
+                let dataRows = parseContent(content);
+
+                loadData(dataRows, metadata);
+              } catch (e) {
+                return;
+              }
+            });
           });
-        });
+        }
+      } catch (e) {
+        console.log('Error parsing file:', file);
       }
     });
   });
