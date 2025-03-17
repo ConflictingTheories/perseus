@@ -30,7 +30,7 @@ const LibraryScreen = ({ navigation, darkMode }) => {
     // TODO - also implement the option to upload books to the database
     // from a number of sources - PDF, EPUB, Text, etc.
   
-    // todo - look into making this a feature (paid??)
+    // TODO - look into making this a feature (paid??)
     // support offline reading of books
     // Fetch books from the Perseus Library API
     fetch('https://api.perseus.tufts.edu/library')
