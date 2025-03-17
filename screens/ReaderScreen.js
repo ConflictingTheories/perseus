@@ -1,12 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Modal } from 'react-native';
-import { useTheme, ThemeProvider } from '../app/ThemeContext';
+import { useTheme } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 
 const ReaderScreen = ({ route }) => {
   const { content, font } = route.params;
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const [bookContent] = useState(content || '');
   const [mode, setMode] = useState('reader'); // 'reader' or 'wordLookup'
   const [text, setSelectedText] = useState('');

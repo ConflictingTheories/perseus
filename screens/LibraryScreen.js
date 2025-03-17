@@ -1,11 +1,10 @@
 // screens/LibraryScreen.js
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import defaultBooks from '../data/demo';
-import { useTheme, toggleTheme } from '../app/ThemeContext';
+import { useTheme } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
-import { getBookList, initializeFts } from '../data/ftsDb';
+import { getBookList, initializeFts, loadFtsData } from '../data/ftsDb';
 
 const LibraryScreen = ({ navigation, darkMode }) => {
   const [books, setBooks] = useState([]);
@@ -26,20 +25,25 @@ const LibraryScreen = ({ navigation, darkMode }) => {
       });
     });
 
-    // // Fetch books from the Perseus Library API
-    // fetch('https://api.perseus.tufts.edu/library')
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     if (data.books && data.books.length > 0) {
-    //       setBooks(data.books);
-    //     } else {
-    //       // setBooks(defaultBooks);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching books:', error);
-    //     // setBooks(defaultBooks);
-    //   });
+    // TODO - support fetching books from API
+
+    // TODO - also implement the option to upload books to the database
+    // from a number of sources - PDF, EPUB, Text, etc.
+  
+    // todo - look into making this a feature (paid??)
+    // support offline reading of books
+    // Fetch books from the Perseus Library API
+    fetch('https://api.perseus.tufts.edu/library')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.books && data.books.length > 0) {
+          // load into FTS database
+          loadFtsData(data.books);
+        } 
+      })
+      .catch((error) => {
+        console.error('Error fetching remote books:', error);
+      });
   }, []);
 
   return (
