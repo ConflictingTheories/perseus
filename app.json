@@ -25,10 +25,19 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      ["expo-font"],
       [
-        "expo-font",
+        "expo-sqlite",
         {
-          "fonts": ["./assets/fonts/GFS_Didot/GFSDidot-Regular.ttf"]
+          "enableFTS": true,
+          "useSQLCipher": false,
+          "android": {
+            "enableFTS": true,
+            "useSQLCipher": false
+          },
+          "ios": {
+            "customBuildFlags": ["-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"]
+          }
         }
       ]
     ]

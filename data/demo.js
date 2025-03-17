@@ -15,6 +15,10 @@ export default [
       'ἤσθιον· αὐτὰρ ὁ τοῖσιν ἀφείλετο νόστιμον ἦμαρ.',
       'τῶν ἁμόθεν γε, θεά, θύγατερ Διός, εἰπὲ καὶ ἡμῖν.',
     ].join('\n'),
+    metadata: {
+      author: 'Homer',
+      urn: 'urn:cts:greekLit:tlg0012.tlg002',
+    },
   },
   {
     id: 'demo-lt',
@@ -32,11 +36,19 @@ export default [
       'Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam.',
       'Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi.',
     ].join('\n'),
+    metadata: {
+      author: 'Unknown',
+      urn: 'urn:cts:latinLit:phi1294',
+    },
   },
   {
     id: 'demo-jp',
     font: 'sans-serif',
     title: '古池 (ふるいけ, "Furuike")',
     content: ['ふるいけや', 'かわずとびこむ', 'みずのおと'].join('\n'),
+    metadata: {
+      author: 'Matsuo Bashō',
+      urn: 'urn:cts:jpLit:haiku.basho.furuike',
+    },
   },
 ];
