@@ -3,16 +3,24 @@ import demo from './demo';
 import { deleteDatabaseAsync } from 'expo-sqlite';
 
 // Open a SINGLE database connection globally
-deleteDatabaseAsync('perseus.db');
 const db = SQLite.openDatabaseAsync('perseus.db', { useNewConnection: false });
+
+// Open database connection
+export const openConnection = async () => {
+  return await db;
+};
+
+// delete database (for testing / reset)
+export const deleteTable = async () => {
+  await deleteDatabaseAsync('perseus.db');
+};
 
 // Check if table exists
 export const checkIfTableExists = async (tableName) => {
   try {
     console.log(`Checking if table exists: ${tableName}`);
-    let connection = await db;
-    let res = await connection.runAsync("SELECT name FROM sqlite_master WHERE type='table' AND name=?", [tableName]);
-    let rows = await res.getAllAsync();
+    let connection = await openConnection();
+    let rows = await connection.getAllAsync("SELECT name FROM sqlite_master WHERE type='table' AND name=?", [tableName]);
     return rows.length > 0;
   } catch (error) {
     console.error(`Error checking table "${tableName}":`, error);
@@ -26,7 +34,7 @@ export const initializeFts = async () => {
     let tableExists = await checkIfTableExists('text_fts');
 
     if (!tableExists) {
-      let connection = await db;
+      let connection = await openConnection();
       await connection.execAsync('CREATE VIRTUAL TABLE text_fts USING fts4(id, title, language, font, content, metadata)');
       console.log('FTS table created.');
 
@@ -69,7 +77,8 @@ export const loadFtsData = async (data) => {
 // Search in FTS table
 export const searchFts = async (query) => {
   try {
-    return await db.getAllAsync('SELECT * FROM text_fts WHERE content MATCH ?', [query]);
+    let connection = await openConnection();
+    return await connection.getAllAsync('SELECT * FROM text_fts WHERE content MATCH ?', [query]);
   } catch (error) {
     console.error('Error searching FTS:', error);
     return [];
@@ -78,10 +87,10 @@ export const searchFts = async (query) => {
 
 // Fetch paginated book list
 export const getBookList = async (page, limit) => {
-  const db = await SQLite.openDatabaseAsync('perseus.db', { useNewConnection: true });
+  let connection = await openConnection();
   const offset = (page - 1) * limit;
   try {
-    return await db.getAllAsync('SELECT * FROM text_fts LIMIT ? OFFSET ?', [limit, offset]);
+    return await connection.getAllAsync('SELECT * FROM text_fts LIMIT ? OFFSET ?', [limit, offset]);
   } catch (error) {
     console.error('Error fetching books:', error);
     return [];
@@ -91,7 +100,8 @@ export const getBookList = async (page, limit) => {
 // Fetch book content by ID
 export const getBookContent = async (bookId) => {
   try {
-    let res = await db.runAsync('SELECT content FROM text_fts WHERE rowid = ? LIMIT 1', [bookId]);
+    let connection = await openConnection();
+    let res = await connection.runAsync('SELECT content FROM text_fts WHERE rowid = ? LIMIT 1', [bookId]);
     let content = await res.getFirstAsync();
     return content ? content.content : '';
   } catch (error) {
