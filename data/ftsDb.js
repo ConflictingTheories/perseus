@@ -6,7 +6,7 @@ import { deleteDatabaseAsync } from 'expo-sqlite';
 
 // Open database connection
 export const openConnection = async () => {
-  return await SQLite.openDatabaseAsync('perseus.db', { useNewConnection: false });
+  return await SQLite.openDatabaseAsync('perseus.db', { useNewConnection: true });
 };
 
 // delete database (for testing / reset)
@@ -97,12 +97,14 @@ export const getBookList = async (page, limit) => {
 };
 
 // Fetch book content by ID
-export const getBookContent = async (bookId) => {
+export const getBookContent = async (bookId, lines) => {
   try {
     let connection = await openConnection();
-    let res = await connection.runAsync('SELECT content FROM text_fts WHERE rowid = ? LIMIT 1', [bookId]);
-    let content = await res.getFirstAsync();
-    return content ? content.content : '';
+    let row = await connection.getFirstAsync('SELECT content FROM text_fts WHERE id = ? LIMIT 1', [bookId]);
+    let lines = String.prototype.split.call(row.content, '\n');
+    console.log(lines);
+
+    return lines.join('\n') || '';
   } catch (error) {
     console.error('Error fetching book content:', error);
     return '';

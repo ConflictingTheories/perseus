@@ -3,6 +3,7 @@ import React from 'react';
 import MainNavigator from '../nav/MainNavigator';
 import { useFonts, GFSDidot_400Regular } from '@expo-google-fonts/gfs-didot';
 import { ThemeProvider } from './ThemeContext';
+import { SQLiteProvider } from 'expo-sqlite';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -13,9 +14,11 @@ export default function App() {
     return <ThemeProvider></ThemeProvider>;
   } else {
     return (
+      <SQLiteProvider databaseName="perseus.db" assetSource={{ assetId: require('../assets/perseus.db') }}>
         <ThemeProvider>
           <MainNavigator />
         </ThemeProvider>
+      </SQLiteProvider>
     );
   }
 }

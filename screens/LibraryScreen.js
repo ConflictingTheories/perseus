@@ -56,7 +56,7 @@ const LibraryScreen = ({ navigation, darkMode }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.button}
-            onPress={async () => navigation.navigate('Reader', { bookId: item.id, content: await getBookContent(item.id), font: item.font, lines: 5 })}
+            onPress={async () => navigation.navigate('Reader', { bookId: item.id, font: item.font, lines: 5 })}
           >
             <Text style={styles.buttonText}>{item.title}</Text>
           </TouchableOpacity>

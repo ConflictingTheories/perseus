@@ -3,7 +3,7 @@ const path = require('path');
 const xml2js = require('xml2js');
 const sqlite3 = require('sqlite3').verbose();
 
-const literatureDirectory = __dirname + '/../literature/canonical-greekLit-master/data';
+const literatureDirectory = __dirname + '/../literature/canonical-greekLit-master/data/tlg0007';
 
 const languageMap = {
   greek: 'GFSDidot_400Regular',
@@ -54,10 +54,18 @@ function extractText(node) {
     return node;
   }
   if (typeof node === 'object') {
-    let text = '';
+    let text = '\n';
+    if (node['type']) {
+      return text;
+    }
+
     for (let key in node) {
-      if (key === '_') {
-        text += node[key];
+      if(['pb', 'lb', 'cb'].includes(key)) {
+        continue;
+      }
+
+      if (key === '_' && (node[key] === 'p' || node[key] === 'l')) {
+        text += extractText(node[key]);
       } else {
         text += extractText(node[key]);
       }
@@ -117,7 +125,7 @@ function parseXMLFiles(directory) {
               let languageDetails = teiHeader?.profileDesc ? teiHeader?.profileDesc[0]?.langUsage[0] : {};
 
               // misc
-              let sourceDetails = fileDesc?.sourceDesc? fileDesc?.sourceDesc[0] : {};
+              let sourceDetails = fileDesc?.sourceDesc ? fileDesc?.sourceDesc[0] : {};
               let encodingDetails = encodingDesc || {};
               let revisionDetails = revisionDesc || {};
 

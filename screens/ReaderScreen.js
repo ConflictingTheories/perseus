@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Modal } from 'react-native';
 import { useTheme } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
+import { getBookContent } from '../data/ftsDb';
 
 const ReaderScreen = ({ route }) => {
-  const { content, font } = route.params;
+  const { bookId, font, lines } = route.params;
   const { theme } = useTheme();
-  const [bookContent] = useState(content || '');
+  const [bookContent, setContent] = useState('');
   const [mode, setMode] = useState('reader'); // 'reader' or 'wordLookup'
   const [text, setSelectedText] = useState('');
   const [selectedWord, setSelectedWord] = useState('');
   const [highlightedText, setHighlightedText] = useState('');
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    async function fetchContent(id) {
+      setContent(await getBookContent(id, lines));
+    }
+    fetchContent(bookId);
+  }, [bookId, lines]);
 
   const styles = StyleSheet.create({
     ...(theme === 'light' ? lightModeStyle.reader : darkModeStyle.reader),
