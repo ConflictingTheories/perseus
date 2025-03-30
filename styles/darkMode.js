@@ -1,8 +1,9 @@
 export default {
-  // navigation styles
+  // navigation styles (unchanged)
   navigation: {
     headerStyle: {
-      backgroundColor: '#fff',
+      backgroundColor: '#111',
+      color: '#d4af37', // gold color
     },
     headerTintColor: '#d4af37',
     headerTitleStyle: {
@@ -13,7 +14,7 @@ export default {
       fontFamily: 'serif',
     },
   },
-  // library screen
+  // library screen (unchanged)
   library: {
     container: {
       flex: 1,
@@ -44,7 +45,7 @@ export default {
       fontWeight: 'bold',
     },
   },
-  // reader screen
+  // reader screen - updated for dark mode
   reader: {
     title: {
       fontSize: 32,
@@ -64,7 +65,7 @@ export default {
       position: 'absolute',
       bottom: 0,
       width: '100%',
-      backgroundColor: 'white',
+      backgroundColor: '#1a1a1a', // dark background for modal
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
       shadowColor: 'black',
@@ -76,20 +77,21 @@ export default {
     container: {
       padding: 10,
       flex: 1,
-      backgroundColor: '#f5f5dc', // parchment color
+      backgroundColor: '#121212', // dark background
     },
     modeSwitch: {
       flexDirection: 'row',
+      backgroundColor: '#1a1a1a', // dark background
       justifyContent: 'space-around',
       marginBottom: 10,
       marginTop: 10,
     },
     activeMode: {
       fontWeight: 'bold',
-      color: 'blue',
+      color: '#d4af37', // gold color for active mode
     },
     inactiveMode: {
-      color: 'gray',
+      color: '#666', // dimmed color for inactive
     },
     lineContainer: {
       flexDirection: 'row',
@@ -100,14 +102,52 @@ export default {
       width: 30,
       textAlign: 'right',
       marginRight: 10,
-      color: '#888',
+      color: '#555', // dimmed color for line numbers
     },
     lineText: {
       flex: 1,
       flexWrap: 'wrap',
+      color: '#e0e0e0', // light text color
     },
     word: {
       fontWeight: 'normal',
+      color: '#e0e0e0', // light text color
+    },
+    // Add these new styles for the dark mode controls
+    controlButtonsContainer: {
+      position: 'absolute',
+      bottom: 20,
+      right: 20,
+      zIndex: 2,
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+    },
+    controlButton: {
+      backgroundColor: 'rgba(30, 30, 30, 0.8)', // dark semi-transparent
+      borderRadius: 25,
+      width: 50,
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 5,
+      borderWidth: 1,
+      borderColor: 'rgba(212, 175, 55, 0.3)', // gold border
+    },
+    overlayTop: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 50,
+      zIndex: 1,
+    },
+    overlayBottom: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 50,
+      zIndex: 1,
     },
   },
 };

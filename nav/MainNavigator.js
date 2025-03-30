@@ -6,6 +6,7 @@ import LibraryScreen from '../screens/LibraryScreen';
 import ReaderScreen from '../screens/ReaderScreen';
 import { useTheme } from '../app/ThemeContext';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Make sure to install this package
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 
@@ -25,6 +26,10 @@ const MainNavigator = () => {
       backgroundColor: 'black',
       color: 'white',
     },
+    text: {
+      padding: 10,
+      color: theme === 'light' ? '#333' : '#d4af37', // gold color
+    }
   });
 
   return (
@@ -36,7 +41,18 @@ const MainNavigator = () => {
             ...(theme === 'light' ? lightModeStyle.navigation : darkModeStyle.navigation),
             headerRight: () => (
               <TouchableOpacity onPress={toggleTheme}>
-                <Text>{theme === 'light' ? 'Dark' : 'Light'}</Text>
+                <Text style={styles.text}>
+                  <Ionicons
+                    name={theme === 'light' ? "contrast" : "contrast-outline"}
+                    size={24}
+                    color={theme === 'light' ? 'black' : '#d4af37'}
+                  />
+                  <Ionicons
+                    name={theme === 'light' ? "sunny" : "sunny-outline"}
+                    size={24}
+                    color={theme === 'light' ? 'black' : '#d4af37'}
+                  />
+                </Text>
               </TouchableOpacity>
             ),
           }}

@@ -32,18 +32,22 @@ const ReaderScreen = ({ route }) => {
     lineText: {
       fontFamily: font || 'serif',
       fontSize: fontSize,
+      color: theme === 'light' ? 'black' : 'white'
     },
     word: {
       fontFamily: font || 'serif',
       fontSize: fontSize,
+      color: theme === 'light' ? 'black' : 'white'
     },
     scrollContainer: {
       flex: 1,
       position: 'relative',
+      backgroundColor: '#1a1a1a', // dark background
     },
     contentContainer: {
       paddingTop: 32,
       paddingBottom: 32,
+      backgroundColor: theme === 'light' ? 'white' : 'black'
     },
     overlayTop: {
       position: 'absolute',
@@ -181,19 +185,19 @@ const ReaderScreen = ({ route }) => {
       {/* Control buttons */}
       <View style={styles.controlButtonsContainer}>
         <TouchableOpacity style={styles.controlButton} onPress={increaseFontSize}>
-          <Text style={{ fontSize: 10, color: theme === 'light' ? 'black' : 'white' }}>
+          <Text style={{ fontSize: 10, color: theme === 'light' ? 'black' : '#d4af37' }}>
             <Ionicons
               name="text"
               size={24}
-              color={theme === 'light' ? 'black' : 'white'}
+              color={theme === 'light' ? 'black' : '#d4af37'}
             />
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.controlButton} onPress={decreaseFontSize}>
-          <Text style={{ fontSize: 10, color: theme === 'light' ? 'black' : 'white' }}><Ionicons
+          <Text style={{ fontSize: 10, color: theme === 'light' ? 'black' : '#d4af37' }}><Ionicons
             name="text-outline"
             size={20}
-            color={theme === 'light' ? 'black' : 'white'}
+            color={theme === 'light' ? 'black' : '#d4af37'}
           />
           </Text>
         </TouchableOpacity>
@@ -201,11 +205,11 @@ const ReaderScreen = ({ route }) => {
 
       <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modal}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-            <Text style={{ fontFamily: font }}>{selectedWord}</Text>
-          </View>
+          {/* <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}> */}
+          <Text style={{ color: theme === 'light' ? 'black' : 'white', fontFamily: font }}>{selectedWord}</Text>
+          {/* </View> */}
           <TouchableOpacity onPress={() => setShowModal(false)} style={styles.modalClose}>
-            <Text>X</Text>
+            <Text style={{ color: theme === 'light' ? 'black' : 'white', fontFamily: font }}>X</Text>
           </TouchableOpacity>
         </View>
       </Modal>

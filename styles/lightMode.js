@@ -86,7 +86,7 @@ export default {
     },
     activeMode: {
       fontWeight: 'bold',
-      color: 'blue',
+      color: 'white',
     },
     inactiveMode: {
       color: 'gray',
