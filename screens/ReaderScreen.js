@@ -181,18 +181,21 @@ const ReaderScreen = ({ route }) => {
       {/* Control buttons */}
       <View style={styles.controlButtonsContainer}>
         <TouchableOpacity style={styles.controlButton} onPress={increaseFontSize}>
-          <Ionicons
-            name="text"
-            size={24}
-            color={theme === 'light' ? 'black' : 'white'}
-          />
+          <Text style={{ fontSize: 10, color: theme === 'light' ? 'black' : 'white' }}>
+            <Ionicons
+              name="text"
+              size={24}
+              color={theme === 'light' ? 'black' : 'white'}
+            />
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.controlButton} onPress={decreaseFontSize}>
-          <Ionicons
+          <Text style={{ fontSize: 10, color: theme === 'light' ? 'black' : 'white' }}><Ionicons
             name="text-outline"
-            size={16}
+            size={20}
             color={theme === 'light' ? 'black' : 'white'}
           />
+          </Text>
         </TouchableOpacity>
       </View>
 
