@@ -33,6 +33,30 @@ const ReaderScreen = ({ route }) => {
     word: {
       fontFamily: font || 'serif',
     },
+    scrollContainer: {
+      flex: 1,
+      position: 'relative',
+    },
+    contentContainer: {
+      paddingTop: 28,
+      paddingBottom: 28,
+    },
+    overlayTop: {
+      position: 'absolute',
+      top: 40,
+      left: 0,
+      right: 0,
+      height: 40,
+      zIndex: 1,
+    },
+    overlayBottom: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 50,
+      zIndex: 1,
+    },
   });
 
   // Implement line selection logic here
@@ -93,20 +117,20 @@ const ReaderScreen = ({ route }) => {
 
   return (
     <View style={styles.scrollContainer}>
+      <View style={styles.modeSwitch}>
+        <TouchableOpacity onPress={() => setMode('reader')}>
+          <Text style={mode === 'reader' ? styles.activeMode : styles.inactiveMode}>Reader Mode</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setMode('wordLookup')}>
+          <Text style={mode === 'wordLookup' ? styles.activeMode : styles.inactiveMode}>Word Lookup Mode</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView
         ref={scrollViewRef}
         contentContainerStyle={styles.contentContainer}
         {...panResponder.panHandlers}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.modeSwitch}>
-          <TouchableOpacity onPress={() => setMode('reader')}>
-            <Text style={mode === 'reader' ? styles.activeMode : styles.inactiveMode}>Reader Mode</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setMode('wordLookup')}>
-            <Text style={mode === 'wordLookup' ? styles.activeMode : styles.inactiveMode}>Word Lookup Mode</Text>
-          </TouchableOpacity>
-        </View>
         <View>{renderContentWithLineNumbers(bookContent)}</View>
       </ScrollView>
 
