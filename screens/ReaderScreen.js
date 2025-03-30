@@ -152,6 +152,8 @@ const ReaderScreen = ({ route }) => {
 
   return (
     <View style={styles.scrollContainer}>
+      
+      {/* Mode Select Switch */}
       <View style={styles.modeSwitch}>
         <TouchableOpacity onPress={() => setMode('reader')}>
           <Text style={mode === 'reader' ? styles.activeMode : styles.inactiveMode}>Reader Mode</Text>
@@ -159,7 +161,10 @@ const ReaderScreen = ({ route }) => {
         <TouchableOpacity onPress={() => setMode('wordLookup')}>
           <Text style={mode === 'wordLookup' ? styles.activeMode : styles.inactiveMode}>Word Lookup Mode</Text>
         </TouchableOpacity>
-      </View> <ScrollView
+      </View>
+      
+      {/* Content display */}
+      <ScrollView
         ref={scrollViewRef}
         contentContainerStyle={styles.contentContainer}
         {...panResponder.panHandlers}
@@ -203,6 +208,7 @@ const ReaderScreen = ({ route }) => {
         </TouchableOpacity>
       </View>
 
+     {/* Modal for lookup */}
       <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modal}>
           {/* <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}> */}
