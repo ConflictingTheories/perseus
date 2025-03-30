@@ -60,7 +60,7 @@ function extractText(node) {
     }
 
     for (let key in node) {
-      if(['pb', 'lb', 'cb'].includes(key)) {
+      if (['pb', 'lb', 'cb'].includes(key)) {
         continue;
       }
 

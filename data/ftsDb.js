@@ -33,7 +33,7 @@ export const initializeFts = async () => {
     let tableExists = await checkIfTableExists('text_fts');
     if (!tableExists) {
       let connection = await openConnection();
-      await connection.execAsync('CREATE VIRTUAL TABLE text_fts USING fts4(id, title, language, font, content, metadata)');
+      await connection.execAsync('CREATE VIRTUAL TABLE text_fts USING fts5(id, title, language, font, content, metadata)');
       console.log('FTS table created.');
 
       console.log('Inserting demo data...');

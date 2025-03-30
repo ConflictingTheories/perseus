@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Modal } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Modal, Dimensions } from 'react-native';
 import { useTheme } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 import { getBookContent } from '../data/ftsDb';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const ReaderScreen = ({ route }) => {
   const { bookId, font, lines } = route.params;
@@ -14,6 +15,8 @@ const ReaderScreen = ({ route }) => {
   const [selectedWord, setSelectedWord] = useState('');
   const [highlightedText, setHighlightedText] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const scrollViewRef = useRef(null);
+  const { height } = Dimensions.get('window');
 
   useEffect(() => {
     async function fetchContent(id) {
@@ -86,17 +89,41 @@ const ReaderScreen = ({ route }) => {
     },
   });
 
+  // ... rest of your existing functions (handleLinePress, handleWordPress, renderContentWithLineNumbers, panResponder)
+
   return (
-    <ScrollView contentContainerStyle={styles.container} {...panResponder.panHandlers}>
-      <View style={styles.modeSwitch}>
-        <TouchableOpacity onPress={() => setMode('reader')}>
-          <Text style={mode === 'reader' ? styles.activeMode : styles.inactiveMode}>Reader Mode</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setMode('wordLookup')}>
-          <Text style={mode === 'wordLookup' ? styles.activeMode : styles.inactiveMode}>Word Lookup Mode</Text>
-        </TouchableOpacity>
-      </View>
-      <View>{renderContentWithLineNumbers(bookContent)}</View>
+    <View style={styles.scrollContainer}>
+      <ScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={styles.contentContainer}
+        {...panResponder.panHandlers}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.modeSwitch}>
+          <TouchableOpacity onPress={() => setMode('reader')}>
+            <Text style={mode === 'reader' ? styles.activeMode : styles.inactiveMode}>Reader Mode</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setMode('wordLookup')}>
+            <Text style={mode === 'wordLookup' ? styles.activeMode : styles.inactiveMode}>Word Lookup Mode</Text>
+          </TouchableOpacity>
+        </View>
+        <View>{renderContentWithLineNumbers(bookContent)}</View>
+      </ScrollView>
+
+      {/* Top feathered overlay */}
+      <LinearGradient
+        colors={[theme === 'light' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)', 'transparent']}
+        style={styles.overlayTop}
+        pointerEvents="none"
+      />
+
+      {/* Bottom feathered overlay */}
+      <LinearGradient
+        colors={['transparent', theme === 'light' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)']}
+        style={styles.overlayBottom}
+        pointerEvents="none"
+      />
+
       <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modal}>
           <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
@@ -107,7 +134,7 @@ const ReaderScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 };
 
