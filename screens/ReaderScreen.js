@@ -5,16 +5,18 @@ import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 import { getBookContent } from '../data/ftsDb';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons'; // Make sure to install this package
 
 const ReaderScreen = ({ route }) => {
   const { bookId, font, lines } = route.params;
   const { theme } = useTheme();
   const [bookContent, setContent] = useState('');
-  const [mode, setMode] = useState('reader'); // 'reader' or 'wordLookup'
+  const [mode, setMode] = useState('reader');
   const [text, setSelectedText] = useState('');
   const [selectedWord, setSelectedWord] = useState('');
   const [highlightedText, setHighlightedText] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [fontSize, setFontSize] = useState(16); // Default font size
   const scrollViewRef = useRef(null);
   const { height } = Dimensions.get('window');
 
@@ -29,24 +31,26 @@ const ReaderScreen = ({ route }) => {
     ...(theme === 'light' ? lightModeStyle.reader : darkModeStyle.reader),
     lineText: {
       fontFamily: font || 'serif',
+      fontSize: fontSize,
     },
     word: {
       fontFamily: font || 'serif',
+      fontSize: fontSize,
     },
     scrollContainer: {
       flex: 1,
       position: 'relative',
     },
     contentContainer: {
-      paddingTop: 28,
-      paddingBottom: 28,
+      paddingTop: 32,
+      paddingBottom: 32,
     },
     overlayTop: {
       position: 'absolute',
       top: 40,
       left: 0,
       right: 0,
-      height: 40,
+      height: 30,
       zIndex: 1,
     },
     overlayBottom: {
@@ -54,10 +58,37 @@ const ReaderScreen = ({ route }) => {
       bottom: 0,
       left: 0,
       right: 0,
-      height: 50,
+      height: 40,
       zIndex: 1,
     },
+    controlButtonsContainer: {
+      position: 'absolute',
+      bottom: 20,
+      right: 20,
+      zIndex: 2,
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+    },
+    controlButton: {
+      backgroundColor: theme === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
+      borderRadius: 25,
+      width: 50,
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 5,
+      borderWidth: 1,
+      borderColor: theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)',
+    },
   });
+
+  const increaseFontSize = () => {
+    setFontSize(prev => Math.min(prev + 2, 28)); // Limit max size to 28
+  };
+
+  const decreaseFontSize = () => {
+    setFontSize(prev => Math.max(prev - 2, 12)); // Limit min size to 12
+  };
 
   // Implement line selection logic here
   const handleLinePress = (line) => {
@@ -124,8 +155,7 @@ const ReaderScreen = ({ route }) => {
         <TouchableOpacity onPress={() => setMode('wordLookup')}>
           <Text style={mode === 'wordLookup' ? styles.activeMode : styles.inactiveMode}>Word Lookup Mode</Text>
         </TouchableOpacity>
-      </View>
-      <ScrollView
+      </View> <ScrollView
         ref={scrollViewRef}
         contentContainerStyle={styles.contentContainer}
         {...panResponder.panHandlers}
@@ -147,6 +177,24 @@ const ReaderScreen = ({ route }) => {
         style={styles.overlayBottom}
         pointerEvents="none"
       />
+
+      {/* Control buttons */}
+      <View style={styles.controlButtonsContainer}>
+        <TouchableOpacity style={styles.controlButton} onPress={increaseFontSize}>
+          <Ionicons
+            name="text"
+            size={24}
+            color={theme === 'light' ? 'black' : 'white'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.controlButton} onPress={decreaseFontSize}>
+          <Ionicons
+            name="text-outline"
+            size={16}
+            color={theme === 'light' ? 'black' : 'white'}
+          />
+        </TouchableOpacity>
+      </View>
 
       <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modal}>
