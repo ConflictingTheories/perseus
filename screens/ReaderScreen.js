@@ -148,8 +148,6 @@ const ReaderScreen = ({ route }) => {
     },
   });
 
-  // ... rest of your existing functions (handleLinePress, handleWordPress, renderContentWithLineNumbers, panResponder)
-
   return (
     <View style={styles.scrollContainer}>
       
