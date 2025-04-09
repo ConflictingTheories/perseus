@@ -1,6 +1,6 @@
-# Perseus
+# Logios - Literary Mobile Reader
 
-Perseus is a mobile-friendly app inspired by the Scaife Viewer. It aims to provide a simple user experience for accessing and reading various ancient texts and provide a simple and easy interface to analyse and read content from different languages.
+Logios (Perseus Mobile) is a mobile-friendly app inspired by the Scaife Viewer. It aims to provide a simple user experience for accessing and reading various ancient texts and provide a simple and easy interface to analyse and read content from different languages.
 
 ## Features
 
@@ -15,7 +15,7 @@ This project used Expo and React Native. To compile it, you will need to install
 
 ## Getting Started
 
-To get started with Perseus, follow these steps:
+To get started with Logios (Perseus Mobile), follow these steps:
 
 1. Clone the repository: `git clone https://github.com/ConflictingTheories/perseus.git`
 2. Install the required dependencies: `npm install`
@@ -23,7 +23,7 @@ To get started with Perseus, follow these steps:
 
 ## Contributing
 
-Contributions are welcome! If you'd like to contribute to Perseus, please follow these guidelines:
+Contributions are welcome! If you'd like to contribute to Logios, please follow these guidelines:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.
@@ -31,15 +31,19 @@ Contributions are welcome! If you'd like to contribute to Perseus, please follow
 4. Push your branch to your forked repository.
 5. Submit a pull request.
 
-## License
+### LICENSE
 
-This project is licensed under the [MIT License](LICENSE).
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+
+This plugin is free to use for non-commercial use only. If you are an individual, a hobbyist, or a tinkerer than this is free to use for your personal use excluding any commercial use. All modifications to the source code must be released back as open source to the community and preferably a pull request will be made with the available updates and improvements if applicable. There is commercial licensing available upon an individual request basis. The licensing will be based upon the scope and revenue expectations of the commercial use-case. For more information, please reach out via email to director@sovereign.enterprises for licensing details. For more information on the non-commerical license which is included by default - please see [LICENSE](LICENSE)
+
 
 ## Contact
 
-If you have any questions or suggestions, feel free to reach out to me.
+If you have any questions or suggestions, feel free to reach out to me. Or visit (https://sovereign-research.com)
 
 
 ## Screenshot
 
-![Example Line 1-10 from Homer's Odyssey in Greek](docs/example-odyseey.png)
+![Light Mode - Example Line 1-10 from Homer's Odyssey in Greek](./docs/odyssey-light.png)
+![Dark Mode - Example Line 1-10 from Homer's Odyssey in Greek](./docs/odyssey-dark.png)
