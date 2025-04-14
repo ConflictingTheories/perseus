@@ -4,7 +4,6 @@ export default {
       docId: 'demo-grc',
       language: 'grc',
       title: 'Ὀδύσσεια',
-      font: 'GFSDidot_400Regular',
       content: [
         'ἄνδρα μοι ἔννεπε, Μοῦσα, πολύτροπον, ὃς μάλα πολλὰ',
         'πλάγχθη, ἐπεὶ Τροίης ἱερὸν πτολίεθρον ἔπερσε·',
@@ -67,7 +66,6 @@ export default {
     {
       docId: 'demo-lat',
       title: 'Lorem Ipsum',
-      font: 'serif',
       language: 'lat',
       content: [
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -92,7 +90,6 @@ export default {
   jpn: [
     {
       docId: 'demo-jpn',
-      font: 'sans-serif',
       language: 'jpn',
       title: '古池 (ふるいけ, "Furuike")',
       content: ['ふるいけや', 'かわずとびこむ', 'みずのおと'].join('\n'),

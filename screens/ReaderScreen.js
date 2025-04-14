@@ -21,8 +21,8 @@ const ReaderScreen = ({ route }) => {
 
   console.log('Book ID:', bookId);
   console.log('Language:', language);
-  
-  const fts = new FTSService('perseus.db', language);
+
+  const fts = new FTSService(language);
 
   useEffect(() => {
     async function fetchContent(id) {

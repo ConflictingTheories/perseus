@@ -1,4 +1,10 @@
+import { GFSDidot_400Regular } from '@expo-google-fonts/gfs-didot';
+
 export default {
+    database: 'perseus.db',
+    databaseFile: require('../assets/perseus.db'),
+    documentTableName: 'documents',
+    ftsTableNamePrefix: 'text_fts_',
     languages: [
         'en', // English
         'grc', // Greek
@@ -6,11 +12,16 @@ export default {
         'jpn', // Japanese
         'it', // Italian
     ],
+    defaultFont: 'sans-serif',
+    defaultLanguage: 'en',
     fonts: {
-        'en': 'GFSDidot_400Regular',
+        GFSDidot_400Regular,
+    },
+    fontMap: {
+        'en': 'sans-serif',
         'grc': 'GFSDidot_400Regular',
-        'lat': 'GFSDidot_400Regular',
-        'jpn': 'GFSDidot_400Regular',
-        'it': 'GFSDidot_400Regular',
+        'lat': 'serif',
+        'jpn': 'sans-serif',
+        'it': 'serif',
     },
 }

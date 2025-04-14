@@ -1,14 +1,14 @@
 import SQLiteService from "./sqliteService";
+import settings from "../config/settings";
 export default class FTSService {
     /**
      * 
-     * @param {*} database 
      * @param {*} language 
      */
-    constructor(database = 'perseus.db', language = 'en') {
+    constructor(language = 'en') {
         this.language = language;
-        this.database = database;
-        this.ftsTableName = `text_fts_${language}`;
+        this.database = settings.database;
+        this.ftsTableName = `${settings.ftsTableNamePrefix}${language}`;
         this.sqliteService = new SQLiteService();
         this.db = null;
     }
@@ -48,12 +48,12 @@ export default class FTSService {
             }
 
             // drop the FTS table if it exists
-                await this.db.execAsync(`DROP TABLE IF EXISTS documents;`);
+                await this.db.execAsync(`DROP TABLE IF EXISTS ${settings.documentDatabase};`);
                 await this.db.execAsync(`DROP TABLE IF EXISTS ${this.ftsTableName};`);
 
-            const documentTableExists = await this.sqliteService.checkIfTableExists('documents');
+            const documentTableExists = await this.sqliteService.checkIfTableExists(settings.documentDatabase);
             if (!documentTableExists) {
-                await this.db.execAsync(`CREATE TABLE IF NOT EXISTS documents(id INTEGER PRIMARY KEY, doc_id TEXT UNIQUE, title TEXT, font TEXT, language TEXT, content TEXT, metadata TEXT);`);
+                await this.db.execAsync(`CREATE TABLE IF NOT EXISTS ${settings.documentDatabase}(id INTEGER PRIMARY KEY, doc_id TEXT UNIQUE, title TEXT, font TEXT, language TEXT, content TEXT, metadata TEXT);`);
             }
 
             const ftsTableExists = await this.sqliteService.checkIfTableExists(this.ftsTableName);
@@ -63,14 +63,14 @@ export default class FTSService {
 
                 // Triggers for Linked Updates
                 await this.db.execAsync(`
-                    CREATE TRIGGER documents_after_insert_${this.ftsTableName} AFTER INSERT ON documents
+                    CREATE TRIGGER ${settings.documentDatabase}_after_insert_${this.ftsTableName} AFTER INSERT ON ${settings.documentDatabase}
                     BEGIN
                         INSERT INTO ${this.ftsTableName} (rowid, title, content, metadata)
                         VALUES (new.id, new.title, new.content, new.metadata);
                     END;
                 `);
                 await this.db.execAsync(`
-                    CREATE TRIGGER documents_after_update_${this.ftsTableName} AFTER UPDATE ON documents
+                    CREATE TRIGGER ${settings.documentDatabase}_after_update_${this.ftsTableName} AFTER UPDATE ON ${settings.documentDatabase}
                     BEGIN
                     UPDATE ${this.ftsTableName}
                     SET title = new.title, content = new.content, metadata = new.metadata
@@ -78,7 +78,7 @@ export default class FTSService {
                     END;
                 `);
                 await this.db.execAsync(`
-                    CREATE TRIGGER documents_after_delete_${this.ftsTableName} AFTER DELETE ON documents
+                    CREATE TRIGGER ${settings.documentDatabase}_after_delete_${this.ftsTableName} AFTER DELETE ON ${settings.documentDatabase}
                     BEGIN
                         DELETE FROM ${this.ftsTableName} WHERE rowid = old.id;
                     END;
@@ -105,16 +105,16 @@ export default class FTSService {
             }
             for (const row of data) {
                 try {
-                    if (!row || !row.docId || !row.title || !row.language || !row.font || !row.content) {
+                    if (!row || !row.docId || !row.title || !row.language || !row.content) {
                         continue;
                     }
                     console.log(`Processing row: ${JSON.stringify(row)}`);
-                    console.log(`Inserting row into documents table: ${this.ftsTableName} ${JSON.stringify(row)}`); // triggers update to FTS table
-                    await this.db.runAsync(`INSERT INTO documents (doc_id, title, language, font, content, metadata) VALUES (?, ?, ?, ?, ?, ?)`, [
+                    console.log(`Inserting row into ${settings.documentDatabase} table: ${this.ftsTableName} ${JSON.stringify(row)}`); // triggers update to FTS table
+                    await this.db.runAsync(`INSERT INTO ${settings.documentDatabase} (doc_id, title, language, font, content, metadata) VALUES (?, ?, ?, ?, ?, ?)`, [
                         row.docId,
                         row.title,
                         row.language,
-                        row.font,
+                        settings.fontMap[row.language] || settings.defaultFont,
                         row.content,
                         JSON.stringify(row.metadata),
                     ]);
@@ -154,7 +154,7 @@ export default class FTSService {
             return await this.db.getAllAsync(`
             SELECT 
                 d.id, d.doc_id, d.title, d.language, d.font, d.metadata 
-            FROM documents d
+            FROM ${settings.documentDatabase} d
             WHERE d.language = ?
             LIMIT ? 
             OFFSET ?`, [this.language, limit, offset]);

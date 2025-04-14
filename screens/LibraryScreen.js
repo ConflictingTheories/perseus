@@ -6,13 +6,14 @@ import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
 import FTSService from '../services/ftsService';
 import demo from '../data/demo';
+import settings from '../config/settings';
 
 /**
  * Setup initial demo data
  */
 async function initializeDemoData() {
-  await Promise.all(['grc', 'lat', 'en', 'it', 'jpn'].map(async (language) => {
-    const fts = new FTSService('perseus.db', language);
+  await Promise.all(settings.languages.map(async (language) => {
+    const fts = new FTSService(language);
     await fts.openDatabase();
     await fts.initialize();
     await fts.loadFtsData(demo[language]);
@@ -27,8 +28,8 @@ async function initializeDemoData() {
  * @returns 
  */
 async function getBookList(page, limit) {
-  const allBooks = await Promise.all(['grc', 'lat', 'en', 'it', 'jpn'].map(async (language) => {
-    const fts = new FTSService('perseus.db', language);
+  const allBooks = await Promise.all(settings.languages.map(async (language) => {
+    const fts = new FTSService(language);
     await fts.openDatabase();
     const books = await fts.getBookList(page, limit);
     console.log(['books for language', language, books]);

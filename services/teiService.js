@@ -1,15 +1,7 @@
 import xml2js from 'xml2js';
-
+import settings from '../config/settings';
 export default class TEIService {
-    constructor() {
-        this.languageMap = {
-            grc: 'GFSDidot_400Regular',
-            jpn: 'sans-serif',
-            lat: 'serif',
-            eng: 'serif',
-            it: 'serif',
-        };
-    }
+    constructor() {}
 
     /**
      * get font based on text language
@@ -17,7 +9,7 @@ export default class TEIService {
      * @returns 
      */
     getFont(language) {
-        return this.languageMap[language] || 'serif';
+        return settings.fontMap[language] || settings.defaultFont;
     }
 
     /**

@@ -1,20 +1,19 @@
 // App.js
 import React from 'react';
 import MainNavigator from '../navigation/MainNavigator';
-import { useFonts, GFSDidot_400Regular } from '@expo-google-fonts/gfs-didot';
+import { useFonts } from '@expo-google-fonts/gfs-didot';
 import { ThemeProvider } from './ThemeContext';
 import { SQLiteProvider } from 'expo-sqlite';
+import settings from '../config/settings';
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
-    GFSDidot_400Regular,
-  });
+  let [fontsLoaded] = useFonts(settings.fonts);
 
   if (!fontsLoaded) {
     return <ThemeProvider></ThemeProvider>;
   } else {
     return (
-      <SQLiteProvider databaseName="perseus.db" assetSource={{ assetId: require('../assets/perseus.db') }}>
+      <SQLiteProvider databaseName={settings.database} assetSource={{ assetId: settings.databaseFile }}>
         <ThemeProvider>
           <MainNavigator />
         </ThemeProvider>
