@@ -6,6 +6,7 @@ import darkModeStyle from '../styles/darkMode';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons'; // Make sure to install this package
 import FTSService from '../services/ftsService';
+import settings from '../config/settings';
 
 const ReaderScreen = ({ route }) => {
   const { bookId, language, font, lines } = route.params;
@@ -37,12 +38,14 @@ const ReaderScreen = ({ route }) => {
   const styles = StyleSheet.create({
     ...(theme === 'light' ? lightModeStyle.reader : darkModeStyle.reader),
     lineText: {
-      fontFamily: font || 'serif',
+      fontFamily: font || settings.defaultFont,
       fontSize: fontSize,
+      color: theme === 'light' ? 'black' : '#d4af37',
     },
     word: {
-      fontFamily: font || 'serif',
+      fontFamily: font || settings.defaultFont,
       fontSize: fontSize,
+      color: theme === 'light' ? 'black' : '#d4af37',
     }
   });
 
