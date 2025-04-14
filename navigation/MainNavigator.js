@@ -9,16 +9,67 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Make sure to install this package
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
+import SQLiteService from '../services/sqliteService';
 
 const Stack = createStackNavigator();
 
+/**
+ * Render the theme toggle button.
+ * @param {*} toggleTheme 
+ * @param {*} theme 
+ * @returns 
+ */
+const themeButton = (toggleTheme, theme) => {
+  const styles = theme === 'light' ? lightModeStyle : darkModeStyle;
+  const themeStyles = styles.themeProvider;
+
+  return <TouchableOpacity onPress={toggleTheme}>
+    <Text style={themeStyles.text}>
+      <Ionicons
+        name={theme === 'light' ? "contrast" : "contrast-outline"}
+        color={themeStyles.text.color}
+        size={24}
+      />
+      <Ionicons
+        name={theme === 'light' ? "sunny" : "sunny-outline"}
+        color={themeStyles.text.color}
+        size={24}
+      />
+    </Text>
+  </TouchableOpacity>
+}
+
+/**
+ * Clear the SQLite database and navigate to the Library screen.
+ * @param {SQLiteService} sqliteService - The SQLite service instance.
+ * @param {string} theme - The current theme.
+ */
+const clearCacheButton = (sqliteService, theme) => {
+  const styles = theme === 'light' ? lightModeStyle : darkModeStyle;
+  const themeStyles = styles.themeProvider;
+
+  return <TouchableOpacity onPress={() =>
+    sqliteService.deleteDatabase('perseus.db')
+      .then(() => {
+        console.log('Database deleted');
+        navigation.navigate('Library');
+      }).catch((error) => {
+        console.error('Error deleting database:', error);
+      })}>
+    <Text style={themeStyles.text}>Clear Data</Text>
+  </TouchableOpacity>
+}
+
+/**
+ * 
+ * @returns 
+ */
 const MainNavigator = () => {
   const { theme, toggleTheme } = useTheme();
-
   const styles = theme === 'light' ? lightModeStyle : darkModeStyle;
   const themeStyles = styles.themeProvider;
   const navigationStyles = styles.navigation;
-
+  const sqliteService = new SQLiteService('perseus.db');
   return (
     <NavigationContainer>
       <View style={themeStyles.container}>
@@ -26,25 +77,19 @@ const MainNavigator = () => {
           initialRouteName="Library"
           screenOptions={{
             ...(navigationStyles),
-            headerRight: () => (
-              <TouchableOpacity onPress={toggleTheme}>
-                <Text style={themeStyles.text}>
-                  <Ionicons
-                    name={theme === 'light' ? "contrast" : "contrast-outline"}
-                    color={themeStyles.text.color}
-                    size={24}
-                  />
-                  <Ionicons
-                    name={theme === 'light' ? "sunny" : "sunny-outline"}
-                    color={themeStyles.text.color}
-                    size={24}
-                  />
-                </Text>
-              </TouchableOpacity>
-            ),
+            headerRight: () => themeButton(toggleTheme, theme),
           }}
         >
-          <Stack.Screen name="Library" component={LibraryScreen} />
+          <Stack.Screen name="Library" component={LibraryScreen} options={
+            {
+              headerRight: () => (
+                <>
+                  {clearCacheButton(sqliteService, theme)}
+                  {themeButton(toggleTheme, theme)}
+                </>
+              )
+            }}
+          />
           <Stack.Screen name="Reader" component={ReaderScreen} />
         </Stack.Navigator>
       </View>

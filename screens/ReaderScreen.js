@@ -3,12 +3,12 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PanResponder, Mod
 import { useTheme } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
-import { getBookContent } from '../data/ftsDb';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons'; // Make sure to install this package
+import FTSService from '../services/ftsService';
 
 const ReaderScreen = ({ route }) => {
-  const { bookId, font, lines } = route.params;
+  const { bookId, language, font, lines } = route.params;
   const { theme } = useTheme();
   const [bookContent, setContent] = useState('');
   const [mode, setMode] = useState('reader');
@@ -19,10 +19,18 @@ const ReaderScreen = ({ route }) => {
   const [fontSize, setFontSize] = useState(16); // Default font size
   const scrollViewRef = useRef(null);
 
+  console.log('Book ID:', bookId);
+  console.log('Language:', language);
+  
+  const fts = new FTSService('perseus.db', language);
+
   useEffect(() => {
     async function fetchContent(id) {
-      setContent(await getBookContent(id, lines));
+      await fts.openDatabase();
+      const content = await fts.getBookContent(id, lines)
+      setContent(content);
     }
+
     fetchContent(bookId);
   }, [bookId, lines]);
 
