@@ -12,6 +12,18 @@ export default {
     headerBackTitleStyle: {
       fontFamily: 'serif',
     },
+
+  },
+  themeProvider: {
+    container: {
+      flex: 1,
+      backgroundColor: 'white',
+      color: 'black',
+    },
+    text: {
+      padding: 10,
+      color: '#333',
+    },
   },
   // library screen
   library: {
@@ -108,6 +120,57 @@ export default {
     },
     word: {
       fontWeight: 'normal',
+    },
+    lineText: {
+      color: 'black'
+    },
+    word: {
+      color: 'black'
+    },
+    scrollContainer: {
+      flex: 1,
+      position: 'relative',
+      backgroundColor: '#1a1a1a', // dark background
+    },
+    contentContainer: {
+      paddingTop: 32,
+      paddingBottom: 32,
+      backgroundColor:'white'
+    },
+    overlayTop: {
+      position: 'absolute',
+      top: 40,
+      left: 0,
+      right: 0,
+      height: 30,
+      zIndex: 1,
+    },
+    overlayBottom: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 40,
+      zIndex: 1,
+    },
+    controlButtonsContainer: {
+      position: 'absolute',
+      bottom: 20,
+      right: 20,
+      zIndex: 2,
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+    },
+    controlButton: {
+      backgroundColor:  'rgba(255,255,255,0.7)',
+      borderRadius: 25,
+      width: 50,
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 5,
+      borderWidth: 1,
+      borderColor: 'rgba(0,0,0,0.1)',
     },
   },
 };

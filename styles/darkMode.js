@@ -14,6 +14,17 @@ export default {
       fontFamily: 'serif',
     },
   },
+  themeProvider: {
+    container: {
+      flex: 1,
+      backgroundColor: 'black',
+      color: 'white',
+    },
+    text: {
+      padding: 10,
+      color: '#d4af37', // gold color
+    }
+  },
   // library screen (unchanged)
   library: {
     container: {
@@ -113,7 +124,32 @@ export default {
       fontWeight: 'normal',
       color: '#e0e0e0', // light text color
     },
-    // Add these new styles for the dark mode controls
+    overlayTop: {
+      position: 'absolute',
+      top: 40,
+      left: 0,
+      right: 0,
+      height: 30,
+      zIndex: 1,
+    },
+    overlayBottom: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 40,
+      zIndex: 1,
+    },
+    scrollContainer: {
+      flex: 1,
+      position: 'relative',
+      backgroundColor: '#1a1a1a', // dark background
+    },
+    contentContainer: {
+      paddingTop: 32,
+      paddingBottom: 32,
+      backgroundColor: 'black'
+    },
     controlButtonsContainer: {
       position: 'absolute',
       bottom: 20,
@@ -123,7 +159,7 @@ export default {
       alignItems: 'flex-end',
     },
     controlButton: {
-      backgroundColor: 'rgba(30, 30, 30, 0.8)', // dark semi-transparent
+      backgroundColor: 'rgba(0,0,0,0.7)',
       borderRadius: 25,
       width: 50,
       height: 50,
@@ -131,23 +167,7 @@ export default {
       alignItems: 'center',
       marginVertical: 5,
       borderWidth: 1,
-      borderColor: 'rgba(212, 175, 55, 0.3)', // gold border
-    },
-    overlayTop: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: 50,
-      zIndex: 1,
-    },
-    overlayBottom: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: 50,
-      zIndex: 1,
+      borderColor: 'rgba(255,255,255,0.1)',
     },
   },
 };

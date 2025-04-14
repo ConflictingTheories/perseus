@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LibraryScreen from '../screens/LibraryScreen';
 import ReaderScreen from '../screens/ReaderScreen';
 import { useTheme } from '../app/ThemeContext';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Make sure to install this package
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
@@ -15,42 +15,29 @@ const Stack = createStackNavigator();
 const MainNavigator = () => {
   const { theme, toggleTheme } = useTheme();
 
-  const styles = StyleSheet.create({
-    lightContainer: {
-      flex: 1,
-      backgroundColor: 'white',
-      color: 'black',
-    },
-    darkContainer: {
-      flex: 1,
-      backgroundColor: 'black',
-      color: 'white',
-    },
-    text: {
-      padding: 10,
-      color: theme === 'light' ? '#333' : '#d4af37', // gold color
-    }
-  });
+  const styles = theme === 'light' ? lightModeStyle : darkModeStyle;
+  const themeStyles = styles.themeProvider;
+  const navigationStyles = styles.navigation;
 
   return (
     <NavigationContainer>
-      <View style={theme === 'light' ? styles.lightContainer : styles.darkContainer}>
+      <View style={themeStyles.container}>
         <Stack.Navigator
           initialRouteName="Library"
           screenOptions={{
-            ...(theme === 'light' ? lightModeStyle.navigation : darkModeStyle.navigation),
+            ...(navigationStyles),
             headerRight: () => (
               <TouchableOpacity onPress={toggleTheme}>
-                <Text style={styles.text}>
+                <Text style={themeStyles.text}>
                   <Ionicons
                     name={theme === 'light' ? "contrast" : "contrast-outline"}
+                    color={themeStyles.text.color}
                     size={24}
-                    color={theme === 'light' ? 'black' : '#d4af37'}
                   />
                   <Ionicons
                     name={theme === 'light' ? "sunny" : "sunny-outline"}
+                    color={themeStyles.text.color}
                     size={24}
-                    color={theme === 'light' ? 'black' : '#d4af37'}
                   />
                 </Text>
               </TouchableOpacity>

@@ -18,7 +18,6 @@ const ReaderScreen = ({ route }) => {
   const [showModal, setShowModal] = useState(false);
   const [fontSize, setFontSize] = useState(16); // Default font size
   const scrollViewRef = useRef(null);
-  const { height } = Dimensions.get('window');
 
   useEffect(() => {
     async function fetchContent(id) {
@@ -32,58 +31,11 @@ const ReaderScreen = ({ route }) => {
     lineText: {
       fontFamily: font || 'serif',
       fontSize: fontSize,
-      color: theme === 'light' ? 'black' : 'white'
     },
     word: {
       fontFamily: font || 'serif',
       fontSize: fontSize,
-      color: theme === 'light' ? 'black' : 'white'
-    },
-    scrollContainer: {
-      flex: 1,
-      position: 'relative',
-      backgroundColor: '#1a1a1a', // dark background
-    },
-    contentContainer: {
-      paddingTop: 32,
-      paddingBottom: 32,
-      backgroundColor: theme === 'light' ? 'white' : 'black'
-    },
-    overlayTop: {
-      position: 'absolute',
-      top: 40,
-      left: 0,
-      right: 0,
-      height: 30,
-      zIndex: 1,
-    },
-    overlayBottom: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: 40,
-      zIndex: 1,
-    },
-    controlButtonsContainer: {
-      position: 'absolute',
-      bottom: 20,
-      right: 20,
-      zIndex: 2,
-      flexDirection: 'column',
-      alignItems: 'flex-end',
-    },
-    controlButton: {
-      backgroundColor: theme === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
-      borderRadius: 25,
-      width: 50,
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginVertical: 5,
-      borderWidth: 1,
-      borderColor: theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)',
-    },
+    }
   });
 
   const increaseFontSize = () => {
@@ -150,7 +102,7 @@ const ReaderScreen = ({ route }) => {
 
   return (
     <View style={styles.scrollContainer}>
-      
+
       {/* Mode Select Switch */}
       <View style={styles.modeSwitch}>
         <TouchableOpacity onPress={() => setMode('reader')}>
@@ -160,7 +112,7 @@ const ReaderScreen = ({ route }) => {
           <Text style={mode === 'wordLookup' ? styles.activeMode : styles.inactiveMode}>Word Lookup Mode</Text>
         </TouchableOpacity>
       </View>
-      
+
       {/* Content display */}
       <ScrollView
         ref={scrollViewRef}
@@ -197,21 +149,20 @@ const ReaderScreen = ({ route }) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.controlButton} onPress={decreaseFontSize}>
-          <Text style={{ fontSize: 10, color: theme === 'light' ? 'black' : '#d4af37' }}><Ionicons
-            name="text-outline"
-            size={20}
-            color={theme === 'light' ? 'black' : '#d4af37'}
-          />
+          <Text style={{ fontSize: 10, color: theme === 'light' ? 'black' : '#d4af37' }}>
+            <Ionicons
+              name="text-outline"
+              size={20}
+              color={theme === 'light' ? 'black' : '#d4af37'}
+            />
           </Text>
         </TouchableOpacity>
       </View>
 
-     {/* Modal for lookup */}
+      {/* Modal for lookup */}
       <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modal}>
-          {/* <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}> */}
           <Text style={{ color: theme === 'light' ? 'black' : 'white', fontFamily: font }}>{selectedWord}</Text>
-          {/* </View> */}
           <TouchableOpacity onPress={() => setShowModal(false)} style={styles.modalClose}>
             <Text style={{ color: theme === 'light' ? 'black' : 'white', fontFamily: font }}>X</Text>
           </TouchableOpacity>
