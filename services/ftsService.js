@@ -1,5 +1,10 @@
 import SQLiteService from "./sqliteService";
 export default class FTSService {
+    /**
+     * 
+     * @param {*} database 
+     * @param {*} language 
+     */
     constructor(database = 'perseus.db', language = 'en') {
         this.language = language;
         this.database = database;
@@ -25,6 +30,13 @@ export default class FTSService {
     }
 
     /**
+     * Delete the database
+     */
+    async deleteDatabase() {
+        await this.sqliteService.deleteDatabase(this.database);
+    }
+
+    /**
      * 
      * @returns 
      */
@@ -35,9 +47,23 @@ export default class FTSService {
                 return false;
             }
             // raw document table
-            await this.db.execAsync(`CREATE TABLE IF NOT EXISTS documents(id INTEGER PRIMARY KEY, title TEXT UNIQUE, font TEXT, language TEXT, content TEXT, metadata JSON);`);
-            const tableExists = await this.sqliteService.checkIfTableExists(this.ftsTableName);
-            if (!tableExists) {
+            try {
+                await this.db.execAsync(`DROP TABLE IF EXISTS documents;`);
+            } catch (e) {
+                //
+            }
+            try {
+                await this.db.execAsync(`DROP TABLE IF EXISTS ${this.ftsTableName};`);
+            } catch (e) {
+                //
+            }
+            const documentTableExists = await this.sqliteService.checkIfTableExists('documents');
+            if (!documentTableExists) {
+                await this.db.execAsync(`CREATE TABLE IF NOT EXISTS documents(id INTEGER PRIMARY KEY, title TEXT UNIQUE, font TEXT, language TEXT, content TEXT, metadata JSON);`);
+            }
+
+            const ftsTableExists = await this.sqliteService.checkIfTableExists(this.ftsTableName);
+            if (!ftsTableExists) {
                 // Full Text Search Table for document content, metadata, and other fields
                 await this.db.execAsync(`CREATE VIRTUAL TABLE IF NOT EXISTS ${this.ftsTableName} USING fts5(title, metadata, metadata='documents', 'metadata_rowid'='id', content, content='documents', content_rowid='id');`);
 

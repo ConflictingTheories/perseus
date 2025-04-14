@@ -20,32 +20,32 @@ loadDemoData = async (page, limit, setBooks) => {
   try {
     Promise.all([
       grcFts.openDatabase(),
-      latFts.openDatabase(),
-      enFts.openDatabase(),
-      itFts.openDatabase(),
-      jpnFts.openDatabase(),
+      // latFts.openDatabase(),
+      // enFts.openDatabase(),
+      // itFts.openDatabase(),
+      // jpnFts.openDatabase(),
     ]).then(() => Promise.all([
       grcFts.initialize(),
-      latFts.initialize(),
-      enFts.initialize(),
-      itFts.initialize(),
-      jpnFts.initialize(),
+      // latFts.initialize(),
+      // enFts.initialize(),
+      // itFts.initialize(),
+      // jpnFts.initialize(),
     ])).then(() => Promise.all([
       grcFts.loadFtsData(demo.grc),
-      latFts.loadFtsData(demo.lat),
-      enFts.loadFtsData(demo.en),
-      itFts.loadFtsData(demo.it),
-      jpnFts.loadFtsData(demo.jpn),
+      // latFts.loadFtsData(demo.lat),
+      // enFts.loadFtsData(demo.en),
+      // itFts.loadFtsData(demo.it),
+      // jpnFts.loadFtsData(demo.jpn),
     ])).then(() => Promise.all([
       grcFts.getBookList(page, limit),
-      latFts.getBookList(page, limit),
-      enFts.getBookList(page, limit),
-      itFts.getBookList(page, limit),
-      jpnFts.getBookList(page, limit),
+      // latFts.getBookList(page, limit),
+      // enFts.getBookList(page, limit),
+      // itFts.getBookList(page, limit),
+      // jpnFts.getBookList(page, limit),
     ])).then((data) => {
-      const allBooks = data.flat();//.filter((book) => {
-        // return book && book.id && book.title && book.language && book.font
-      // });
+      const allBooks = data.flat().filter((book) => {
+        return book && book.id && book.title && book.language && book.font
+      });
       if (allBooks && allBooks.length > 0) {
         setBooks(allBooks);
       }

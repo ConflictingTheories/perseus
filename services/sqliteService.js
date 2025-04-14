@@ -2,10 +2,18 @@ import * as SQLite from 'expo-sqlite';
 import { deleteDatabaseAsync } from 'expo-sqlite';
 
 export default class SQLiteService {
+    /**
+     * SQLiteService constructor
+     */
     constructor() {
         this.db = null;
     }
 
+    /**
+     * 
+     * @param {*} database 
+     * @returns 
+     */
     async openDatabase(database) {
         if (!this.db) {
             this.db = await SQLite.openDatabaseAsync(database, { useNewConnection: true });
@@ -13,6 +21,9 @@ export default class SQLiteService {
         return this.db;
     }
 
+    /**
+     * 
+     */
     async closeDatabase() {
         if (this.db) {
             await this.db.closeAsync();
@@ -20,10 +31,19 @@ export default class SQLiteService {
         }
     }
 
+    /**
+     * 
+     * @param {*} database 
+     */
     async deleteDatabase(database) {
         await deleteDatabaseAsync(database);
     };
 
+    /**
+     * 
+     * @param {*} tableName 
+     * @returns 
+     */
     async checkIfTableExists(tableName) {
         try {
             console.log(`Checking if table exists: ${tableName}`);
@@ -39,6 +59,11 @@ export default class SQLiteService {
         }
     };
 
+    /**
+     * 
+     * @param {*} tableName 
+     * @returns 
+     */
     async dropTable(tableName) {
         try {
             if (!this.db) {
