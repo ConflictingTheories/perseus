@@ -8,7 +8,7 @@ import FTSService from '../services/ftsService';
 import demo from '../data/demo';
 
 /**
- * 
+ * Setup initial demo data
  */
 async function initializeDemoData() {
   await Promise.all(['grc', 'lat', 'en', 'it', 'jpn'].map(async (language) => {
@@ -21,7 +21,7 @@ async function initializeDemoData() {
 }
 
 /**
- * 
+ * get list of books from database (paged)
  * @param {*} page 
  * @param {*} limit 
  * @returns 
@@ -53,6 +53,11 @@ loadDemoData = async (page, limit, setBooks) => {
   }
 }
 
+/**
+ * Screen Component
+ * @param {*} param0 
+ * @returns 
+ */
 const LibraryScreen = ({ navigation, darkMode }) => {
   const [books, setBooks] = useState([]);
   const { theme } = useTheme();
@@ -63,7 +68,7 @@ const LibraryScreen = ({ navigation, darkMode }) => {
 
   useEffect(() => {
     loadDemoData(page, limit, setBooks);
-    // TODO - support fetching books from API
+    // TODO - support fetching books from API (look into a 'settings' menu - which can be used to sync)
 
     // TODO - also implement the option to upload books to the database
     // from a number of sources - PDF, EPUB, Text, etc.
