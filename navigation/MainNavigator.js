@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LibraryScreen from '../screens/LibraryScreen';
 import ReaderScreen from '../screens/ReaderScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 import { useTheme } from '../app/ThemeContext';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Make sure to install this package
@@ -32,6 +33,25 @@ const themeButton = (toggleTheme, theme) => {
       />
       <Ionicons
         name={theme === 'light' ? "sunny" : "sunny-outline"}
+        color={themeStyles.text.color}
+        size={24}
+      />
+    </Text>
+  </TouchableOpacity>
+}
+
+/**
+ * Render the theme toggle button.
+ * @returns 
+ */
+const settingsMenuButton = (navigation, theme) => {
+  const styles = theme === 'light' ? lightModeStyle : darkModeStyle;
+  const themeStyles = styles.themeProvider;
+
+  return <TouchableOpacity onPress={() => { navigation.navigate('Settings') }}>
+    <Text style={themeStyles.text}>
+      <Ionicons
+        name={theme === 'light' ? "gear" : "gear-outline"}
         color={themeStyles.text.color}
         size={24}
       />
@@ -77,7 +97,10 @@ const MainNavigator = () => {
           initialRouteName="Library"
           screenOptions={{
             ...(navigationStyles),
-            headerRight: () => themeButton(toggleTheme, theme),
+            headerRight: () => <>
+              {themeButton(toggleTheme, theme)}
+              {/* {settingsMenuButton(navigation, theme)} */}
+            </>
           }}
         >
           <Stack.Screen name="Library" component={LibraryScreen} options={
@@ -86,11 +109,13 @@ const MainNavigator = () => {
                 <>
                   {clearCacheButton(sqliteService, theme)}
                   {themeButton(toggleTheme, theme)}
+                  {/* {settingsMenuButton(navigation, theme)} */}
                 </>
               )
             }}
           />
           <Stack.Screen name="Reader" component={ReaderScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
       </View>
     </NavigationContainer>

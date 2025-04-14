@@ -59,7 +59,7 @@ loadDemoData = async (page, limit, setBooks) => {
  * @param {*} param0 
  * @returns 
  */
-const LibraryScreen = ({ navigation, darkMode }) => {
+const LibraryScreen = ({ navigation }) => {
   const [books, setBooks] = useState([]);
   const { theme } = useTheme();
   const [page, setPage] = useState(1);
@@ -67,27 +67,9 @@ const LibraryScreen = ({ navigation, darkMode }) => {
 
   const styles = StyleSheet.create(theme === 'light' ? lightModeStyle.library : darkModeStyle.library);
 
+  // load demo data - further datasets can be configured and loaded via settings (including the deletion of the demo data)
   useEffect(() => {
     loadDemoData(page, limit, setBooks);
-    // TODO - support fetching books from API (look into a 'settings' menu - which can be used to sync)
-
-    // TODO - also implement the option to upload books to the database
-    // from a number of sources - PDF, EPUB, Text, etc.
-
-    // TODO - look into making this a feature (paid??)
-    // support offline reading of books
-    // Fetch books from the Perseus Library API
-    // fetch('https://api.perseus.tufts.edu/library')
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     if (data.books && data.books.length > 0) {
-    //       // load into FTS database
-    //       loadFtsData(data.books);
-    //     } 
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching remote books:', error);
-    //   });
   }, []);
 
   return (
