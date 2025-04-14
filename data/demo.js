@@ -1,7 +1,7 @@
 export default {
   grc: [
     {
-      id: 'demo-grc',
+      docId: 'demo-grc',
       language: 'grc',
       title: 'Ὀδύσσεια',
       font: 'GFSDidot_400Regular',
@@ -65,7 +65,7 @@ export default {
   ],
   lat: [
     {
-      id: 'demo-lat',
+      docId: 'demo-lat',
       title: 'Lorem Ipsum',
       font: 'serif',
       language: 'lat',
@@ -91,7 +91,7 @@ export default {
   it: [],
   jpn: [
     {
-      id: 'demo-jpn',
+      docId: 'demo-jpn',
       font: 'sans-serif',
       language: 'jpn',
       title: '古池 (ふるいけ, "Furuike")',

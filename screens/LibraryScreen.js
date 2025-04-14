@@ -8,60 +8,48 @@ import FTSService from '../services/ftsService';
 import demo from '../data/demo';
 
 /**
+ * 
+ */
+async function initializeDemoData() {
+  await Promise.all(['grc', 'lat', 'en', 'it', 'jpn'].map(async (language) => {
+    const fts = new FTSService('perseus.db', language);
+    await fts.openDatabase();
+    await fts.initialize();
+    await fts.loadFtsData(demo[language]);
+    await fts.closeDatabase();
+  }));
+}
+
+/**
+ * 
+ * @param {*} page 
+ * @param {*} limit 
+ * @returns 
+ */
+async function getBookList(page, limit) {
+  const allBooks = await Promise.all(['grc', 'lat', 'en', 'it', 'jpn'].map(async (language) => {
+    const fts = new FTSService('perseus.db', language);
+    await fts.openDatabase();
+    const books = await fts.getBookList(page, limit);
+    console.log(['books for language', language, books]);
+    await fts.closeDatabase();
+    return books;
+  }));
+  return allBooks.flat();
+}
+
+/**
  * Load demo data into the FTS database.
  */
 loadDemoData = async (page, limit, setBooks) => {
-  const grcFts = new FTSService('perseus.db', 'grc');
-  const latFts = new FTSService('perseus.db', 'lat');
-  const enFts = new FTSService('perseus.db', 'en');
-  const itFts = new FTSService('perseus.db', 'it');
-  const jpnFts = new FTSService('perseus.db', 'jpn');
-
   try {
-    Promise.all([
-      grcFts.openDatabase(),
-      // latFts.openDatabase(),
-      // enFts.openDatabase(),
-      // itFts.openDatabase(),
-      // jpnFts.openDatabase(),
-    ]).then(() => Promise.all([
-      grcFts.initialize(),
-      // latFts.initialize(),
-      // enFts.initialize(),
-      // itFts.initialize(),
-      // jpnFts.initialize(),
-    ])).then(() => Promise.all([
-      grcFts.loadFtsData(demo.grc),
-      // latFts.loadFtsData(demo.lat),
-      // enFts.loadFtsData(demo.en),
-      // itFts.loadFtsData(demo.it),
-      // jpnFts.loadFtsData(demo.jpn),
-    ])).then(() => Promise.all([
-      grcFts.getBookList(page, limit),
-      // latFts.getBookList(page, limit),
-      // enFts.getBookList(page, limit),
-      // itFts.getBookList(page, limit),
-      // jpnFts.getBookList(page, limit),
-    ])).then((data) => {
-      const allBooks = data.flat().filter((book) => {
-        return book && book.id && book.title && book.language && book.font
-      });
-      if (allBooks && allBooks.length > 0) {
-        setBooks(allBooks);
-      }
-      console.log('Books fetched:', allBooks);
-    }).then(() => Promise.all([
-      grcFts.closeDatabase(),
-      latFts.closeDatabase(),
-      enFts.closeDatabase(),
-      itFts.closeDatabase(),
-      jpnFts.closeDatabase(),
-    ]))
-      .catch((error) => {
-        console.error('Error fetching books:', error);
-      });
+    await initializeDemoData();
+    const allBooks = await getBookList(page, limit);
+    if (allBooks && allBooks.length > 0) {
+      setBooks(allBooks);
+    }
   } catch (error) {
-
+    console.log(error);
   }
 }
 
@@ -75,7 +63,6 @@ const LibraryScreen = ({ navigation, darkMode }) => {
 
   useEffect(() => {
     loadDemoData(page, limit, setBooks);
-
     // TODO - support fetching books from API
 
     // TODO - also implement the option to upload books to the database

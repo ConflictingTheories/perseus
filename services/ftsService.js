@@ -46,26 +46,20 @@ export default class FTSService {
                 console.error(`Database not initialized. Cannot check table existence.`);
                 return false;
             }
-            // raw document table
-            try {
+
+            // drop the FTS table if it exists
                 await this.db.execAsync(`DROP TABLE IF EXISTS documents;`);
-            } catch (e) {
-                //
-            }
-            try {
                 await this.db.execAsync(`DROP TABLE IF EXISTS ${this.ftsTableName};`);
-            } catch (e) {
-                //
-            }
+
             const documentTableExists = await this.sqliteService.checkIfTableExists('documents');
             if (!documentTableExists) {
-                await this.db.execAsync(`CREATE TABLE IF NOT EXISTS documents(id INTEGER PRIMARY KEY, title TEXT UNIQUE, font TEXT, language TEXT, content TEXT, metadata JSON);`);
+                await this.db.execAsync(`CREATE TABLE IF NOT EXISTS documents(id INTEGER PRIMARY KEY, doc_id TEXT UNIQUE, title TEXT, font TEXT, language TEXT, content TEXT, metadata TEXT);`);
             }
 
             const ftsTableExists = await this.sqliteService.checkIfTableExists(this.ftsTableName);
             if (!ftsTableExists) {
                 // Full Text Search Table for document content, metadata, and other fields
-                await this.db.execAsync(`CREATE VIRTUAL TABLE IF NOT EXISTS ${this.ftsTableName} USING fts5(title, metadata, metadata='documents', 'metadata_rowid'='id', content, content='documents', content_rowid='id');`);
+                await this.db.execAsync(`CREATE VIRTUAL TABLE IF NOT EXISTS ${this.ftsTableName} USING fts5(title, content, metadata, content='documents', content_rowid='id');`);
 
                 // Triggers for Linked Updates
                 await this.db.execAsync(`
@@ -111,17 +105,18 @@ export default class FTSService {
             }
             for (const row of data) {
                 try {
-                    console.log(`Processing row: ${JSON.stringify(row)}`);
-                    if (!row || !row.id || !row.title || !row.language || !row.font || !row.content) {
+                    if (!row || !row.docId || !row.title || !row.language || !row.font || !row.content) {
                         continue;
                     }
+                    console.log(`Processing row: ${JSON.stringify(row)}`);
                     console.log(`Inserting row into documents table: ${this.ftsTableName} ${JSON.stringify(row)}`); // triggers update to FTS table
-                    await this.db.runAsync(`INSERT INTO documents (title, language, font, content, metadata) VALUES (?, ?, ?, ?, ?)`, [
+                    await this.db.runAsync(`INSERT INTO documents (doc_id, title, language, font, content, metadata) VALUES (?, ?, ?, ?, ?, ?)`, [
+                        row.docId,
                         row.title,
                         row.language,
                         row.font,
                         row.content,
-                        row.metadata,
+                        JSON.stringify(row.metadata),
                     ]);
                 } catch (error) {
                     console.error('Error inserting row into FTS table:', error);
@@ -155,12 +150,14 @@ export default class FTSService {
     async getBookList(page, limit) {
         const offset = (page - 1) * limit;
         try {
+            console.log([this.language, limit, offset]);
             return await this.db.getAllAsync(`
             SELECT 
-                d.id, d.title, d.language, d.font, d.metadata 
+                d.id, d.doc_id, d.title, d.language, d.font, d.metadata 
             FROM documents d
+            WHERE d.language = ?
             LIMIT ? 
-            OFFSET ?`, [limit, offset]);
+            OFFSET ?`, [this.language, limit, offset]);
         } catch (error) {
             console.error('Error fetching books:', error);
             return [];
