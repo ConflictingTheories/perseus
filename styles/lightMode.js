@@ -55,6 +55,64 @@ export default {
       fontFamily: 'serif', // classical font
       fontWeight: 'bold',
     },
+    // Add these styles to lightMode.js and darkMode.js
+    repositoryItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginVertical: 10,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 5,
+    },
+    repositoryText: {
+      flex: 1,
+      fontSize: 14,
+      color: 'black', // Adjust for dark mode
+    },
+    fetchButton: {
+      backgroundColor: 'blue',
+      padding: 5,
+      borderRadius: 5,
+      marginHorizontal: 5,
+    },
+    fetchButtonText: {
+      color: 'white',
+      fontSize: 12,
+    },
+    removeButton: {
+      backgroundColor: 'red',
+      padding: 5,
+      borderRadius: 5,
+    },
+    removeButtonText: {
+      color: 'white',
+      fontSize: 12,
+    },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 20,
+    },
+    input: {
+      flex: 1,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 5,
+      padding: 10,
+      color: 'black', // Adjust for dark mode
+    },
+    addButton: {
+      backgroundColor: 'green',
+      padding: 10,
+      borderRadius: 5,
+      marginLeft: 10,
+    },
+    addButtonText: {
+      color: 'white',
+      fontSize: 14,
+    },
   },
   // reader screen
   reader: {
@@ -135,7 +193,7 @@ export default {
     contentContainer: {
       paddingTop: 32,
       paddingBottom: 32,
-      backgroundColor:'white'
+      backgroundColor: 'white'
     },
     overlayTop: {
       position: 'absolute',
@@ -162,7 +220,7 @@ export default {
       alignItems: 'flex-end',
     },
     controlButton: {
-      backgroundColor:  'rgba(255,255,255,0.7)',
+      backgroundColor: 'rgba(255,255,255,0.7)',
       borderRadius: 25,
       width: 50,
       height: 50,
@@ -172,5 +230,6 @@ export default {
       borderWidth: 1,
       borderColor: 'rgba(0,0,0,0.1)',
     },
+
   },
 };

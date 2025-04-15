@@ -55,6 +55,63 @@ export default {
       fontFamily: 'serif', // classical font
       fontWeight: 'bold',
     },
+    repositoryItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginVertical: 10,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 5,
+    },
+    repositoryText: {
+      flex: 1,
+      fontSize: 14,
+      color: 'white',
+    },
+    fetchButton: {
+      backgroundColor: 'blue',
+      padding: 5,
+      borderRadius: 5,
+      marginHorizontal: 5,
+    },
+    fetchButtonText: {
+      color: 'white',
+      fontSize: 12,
+    },
+    removeButton: {
+      backgroundColor: 'red',
+      padding: 5,
+      borderRadius: 5,
+    },
+    removeButtonText: {
+      color: 'white',
+      fontSize: 12,
+    },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 20,
+    },
+    input: {
+      flex: 1,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 5,
+      padding: 10,
+      color: 'white',
+    },
+    addButton: {
+      backgroundColor: 'green',
+      padding: 10,
+      borderRadius: 5,
+      marginLeft: 10,
+    },
+    addButtonText: {
+      color: 'white',
+      fontSize: 14,
+    },
   },
   // reader screen - updated for dark mode
   reader: {

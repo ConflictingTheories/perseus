@@ -1,6 +1,6 @@
 // screens/LibraryScreen.js
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
 import { useTheme } from '../app/ThemeContext';
 import lightModeStyle from '../styles/lightMode';
 import darkModeStyle from '../styles/darkMode';
@@ -34,24 +34,30 @@ const SettingsScreen = ({ navigation }) => {
     //     console.error('Error fetching remote books:', error);
     //   });
 
+    const settingsOptions = [
+        { id: '1', title: 'Storage Management', screen: 'StorageManagement' },
+        { id: '2', title: 'Repository Management', screen: 'RepositoryManagement' },
+        { id: '3', title: 'Reader Settings', screen: 'ReaderSettings' },
+        { id: '4', title: 'About', screen: 'About' },
+        { id: '5', title: 'Open Source', screen: 'OpenSource' },
+    ];
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Settings</Text>
-            {/* TODO - Add Settings */}
-
-            {/* <FlatList
-        style={styles.main}
-        data={books}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.button}
-            onPress={async () => navigation.navigate('Reader', { bookId: item.id, language: item.language, font: item.font, lines: 5 })}
-          >
-            <Text style={styles.buttonText}>{item.title}</Text>
-          </TouchableOpacity>
-        )}
-      /> */}
+            <FlatList
+                style={styles.main}
+                data={settingsOptions}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigation.navigate(item.screen)} // Ensure navigation works for all routes
+                    >
+                        <Text style={styles.buttonText}>{item.title}</Text>
+                    </TouchableOpacity>
+                )}
+            />
         </View>
     );
 };

@@ -5,6 +5,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LibraryScreen from '../screens/LibraryScreen';
 import ReaderScreen from '../screens/ReaderScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import AboutScreen from '../screens/settings/AboutScreen';
+import OpenSourceScreen from '../screens/settings/OpenSourceScreen';
+import StorageManagementScreen from '../screens/settings/StorageManagementScreen';
+import RepositoryManagementScreen from '../screens/settings/RepositoryManagementScreen';
+import ReaderSettingsScreen from '../screens/settings/ReaderSettingsScreen';
 import { useTheme } from '../app/ThemeContext';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Make sure to install this package
@@ -48,37 +53,18 @@ const settingsMenuButton = (navigation, theme) => {
   const styles = theme === 'light' ? lightModeStyle : darkModeStyle;
   const themeStyles = styles.themeProvider;
 
-  return <TouchableOpacity onPress={() => { navigation.navigate('Settings') }}>
-    <Text style={themeStyles.text}>
-      <Ionicons
-        name={theme === 'light' ? "gear" : "gear-outline"}
-        color={themeStyles.text.color}
-        size={24}
-      />
-    </Text>
-  </TouchableOpacity>
-}
-
-/**
- * Clear the SQLite database and navigate to the Library screen.
- * @param {SQLiteService} sqliteService - The SQLite service instance.
- * @param {string} theme - The current theme.
- */
-const clearCacheButton = (sqliteService, theme) => {
-  const styles = theme === 'light' ? lightModeStyle : darkModeStyle;
-  const themeStyles = styles.themeProvider;
-
-  return <TouchableOpacity onPress={() =>
-    sqliteService.deleteDatabase('perseus.db')
-      .then(() => {
-        console.log('Database deleted');
-        navigation.navigate('Library');
-      }).catch((error) => {
-        console.error('Error deleting database:', error);
-      })}>
-    <Text style={themeStyles.text}>Clear Data</Text>
-  </TouchableOpacity>
-}
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate('Settings')}> {/* Correct navigation */}
+      <Text style={themeStyles.text}>
+        <Ionicons
+          name={theme === 'light' ? "cog" : "cog-outline"}
+          color={themeStyles.text.color}
+          size={24}
+        />
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 /**
  * 
@@ -95,27 +81,66 @@ const MainNavigator = () => {
       <View style={themeStyles.container}>
         <Stack.Navigator
           initialRouteName="Library"
-          screenOptions={{
+          screenOptions={({ navigation }) => ({ // Pass navigation here
             ...(navigationStyles),
-            headerRight: () => <>
-              {themeButton(toggleTheme, theme)}
-              {/* {settingsMenuButton(navigation, theme)} */}
-            </>
-          }}
+            headerRight: () => (
+              <>
+                {themeButton(toggleTheme, theme)}
+                {settingsMenuButton(navigation, theme)} {/* Use navigation from screenOptions */}
+              </>
+            ),
+          })}
         >
-          <Stack.Screen name="Library" component={LibraryScreen} options={
-            {
+          <Stack.Screen name="Library" component={LibraryScreen} />
+          <Stack.Screen name="Reader" component={ReaderScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen}
+            options={({ navigation }) => ({
               headerRight: () => (
                 <>
-                  {clearCacheButton(sqliteService, theme)}
                   {themeButton(toggleTheme, theme)}
-                  {/* {settingsMenuButton(navigation, theme)} */}
                 </>
-              )
-            }}
-          />
-          <Stack.Screen name="Reader" component={ReaderScreen} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
+              ),
+            })} />
+          <Stack.Screen name="StorageManagement" component={StorageManagementScreen}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <>
+                  {themeButton(toggleTheme, theme)}
+                </>
+              ),
+            })} />
+          <Stack.Screen name="RepositoryManagement" component={RepositoryManagementScreen}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <>
+                  {themeButton(toggleTheme, theme)}
+                </>
+              ),
+            })} />
+          <Stack.Screen name="ReaderSettings" component={ReaderSettingsScreen}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <>
+                  {themeButton(toggleTheme, theme)}
+                </>
+              ),
+            })} />
+          <Stack.Screen name="About" component={AboutScreen}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <>
+                  {themeButton(toggleTheme, theme)}
+                </>
+              ),
+            })} />
+          <Stack.Screen name="OpenSource" component={OpenSourceScreen}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <>
+                  {themeButton(toggleTheme, theme)}
+                </>
+              ),
+            })} />
         </Stack.Navigator>
       </View>
     </NavigationContainer>

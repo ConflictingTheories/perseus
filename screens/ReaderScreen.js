@@ -26,6 +26,15 @@ const ReaderScreen = ({ route }) => {
   const fts = new FTSService(language);
 
   useEffect(() => {
+    async function loadReaderConfig() {
+        const config = await ReaderConfigService.getReaderConfig();
+        setFontSize(config.fontSize || 16);
+        setFontFamily(config.fontFamily || settings.defaultFont);
+    }
+    loadReaderConfig();
+}, []);
+
+  useEffect(() => {
     async function fetchContent(id) {
       await fts.openDatabase();
       const content = await fts.getBookContent(id, lines)
